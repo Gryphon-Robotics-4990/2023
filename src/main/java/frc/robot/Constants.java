@@ -8,20 +8,13 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.vision.*;
 import frc.robot.units.*;
 
+//-1 usually means not yet set
 
 public final class Constants {
     public static class Ports {
         //Laptop ports
         public static int PORT_JOYSTICK_DRIVE = 0;
         public static int PORT_JOYSTICK_OPERATOR = 1;
-
-        //RoboRIO sensor ports
-        
-        //TODO find breakbeam port
-        public static int DIO_BREAKBEAM = 0;
-
-        //Below is format for analog sensors
-        //public static int PWM_NAME = -1;
 
         //CAN Bus IDs
         
