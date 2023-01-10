@@ -15,9 +15,10 @@ public class RobotContainer {
     private final JoystickF310 joystickOperator = new JoystickF310(Ports.PORT_JOYSTICK_OPERATOR);
 
     // Create subsystem objects
-    
+    private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
+
     //Create command objects
-    
+    private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -41,6 +42,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
-        return null;
+        return m_autoCommand.getAutonomousCommand();
     }
 }

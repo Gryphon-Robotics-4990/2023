@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import frc.robot.vision.*;
 import frc.robot.units.*;
 
 //-1 usually means not yet set
@@ -96,6 +98,21 @@ public final class Constants {
         
         //Feedforward
          
+        //All below constants in MotionControl are placeholders, need to be tuned
+        //Feedforward/Feedback Gains
+        public static final double ksVolts = 0.22;
+        public static final double kvVoltSecondsPerMeter = 1.98;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        public static final double kPDriveVel = 8.5;
+        //DifferentialDriveKinematics
+        public static final double kTrackwidthMeters = 0.69;
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+        //Max Trajectory Velocity/Acceleration
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        //Ramsete Parameters (Reasonable Baselines)
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
     }
  
     //Driver settings
