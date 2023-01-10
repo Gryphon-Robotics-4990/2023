@@ -17,7 +17,10 @@ public final class Constants {
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN Bus IDs
-        
+        public static int CAN_DRIVETRAIN_LEFT_FRONT_TALONSRX = -1;
+        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = -1;
+        public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = -1;
+        public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = -1;
         
     }
 
@@ -28,6 +31,7 @@ public final class Constants {
         public static int TALON_DEFAULT_PID_ID = 0;//0 is primary, 1 is auxilary
         public static TalonSRXFeedbackDevice TALON_DEFAULT_FEEDBACK_DEVICE = TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative;
         public static FollowerType DEFAULT_MOTOR_FOLLOWER_TYPE = FollowerType.PercentOutput;
+        public static double TALON_VOLTAGE_CONSTRAINT = 12.0;
     }
 
     public static class RobotMeasurements {
@@ -96,7 +100,10 @@ public final class Constants {
     
     public static class MotionControl {
         //PID
-
+        public static TalonSRXGains TEST_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains TEST_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
         //Feedforward
          
     }
