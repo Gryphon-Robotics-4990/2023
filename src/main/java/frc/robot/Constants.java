@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import frc.robot.vision.*;
 import frc.robot.units.*;
 
 //-1 usually means not yet set
@@ -78,18 +77,6 @@ public final class Constants {
         public static Unit JOULE = new CompoundUnit(new Unit[] {NEWTON, METER}, new Unit[] {});
         public static Unit COULOMB = new CompoundUnit(new Unit[] {AMPERE, SECOND}, new Unit[] {});
         public static Unit VOLTAGE = new CompoundUnit(JOULE, COULOMB);
-
-        
-        //TODO How to implement scalar multipliers and angular->velocity?
-        
-        //Old Code
-        public static double ENCODER_VELOCITY_UNIT_TO_SECONDS = 0.1;//Encoder measures things in units per 0.1s
-        public static double DRIVETRAIN_ENCODER_DISTANCE_TO_METERS = 1 / MotorConfig.TALON_ENCODER_RESOLUTION * 2 * Math.PI * RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS;
-        public static double DRIVETRAIN_ENCODER_VELOCITY_TO_METERS_PER_SECOND = DRIVETRAIN_ENCODER_DISTANCE_TO_METERS / ENCODER_VELOCITY_UNIT_TO_SECONDS;
-        public static double METERS_PER_SECOND_TO_DRIVETRAIN_ENCODER_VELOCITY = 1 / DRIVETRAIN_ENCODER_VELOCITY_TO_METERS_PER_SECOND;
-        public static double SHOOTER_ENCODER_VELOCITY_TO_METERS_PER_SECOND = 0;
-        //public static double DRIVETRAIN_FEEDFORWARD_TO_ENCODER_UNITS = 1;//TODO find this number
-        //public static double SHOOTER_FEEDFORWARD_TO_ENCODER_UNITS = 1;//TODO find this number
     }
 
     public static class SubsystemConfig {
@@ -104,6 +91,9 @@ public final class Constants {
         public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
         public static TalonSRXGains TEST_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
         public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        // Tune this by hooking up phoenix tuner
+        public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
+        
         //Feedforward
          
     }
