@@ -12,18 +12,20 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.MotionControl;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class AutoCommand {
+public class AutoCommand extends CommandBase{
     private final DrivetrainSubsystem m_drivetrain;
 
     public AutoCommand(DrivetrainSubsystem drivetrain) {
         m_drivetrain = drivetrain;
     }
 
-    public RamseteCommand getAutonomousCommand() {
+    public SequentialCommandGroup getAutonomousCommand() {
         // Create voltage constraint to ensure we don't accelerate too fast
 
         // var autoVoltageConstraint = 
