@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.JoystickF310.*;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
+import frc.robot.commands.AutoCommand;
 import static frc.robot.Constants.*;
 
 public class RobotContainer {

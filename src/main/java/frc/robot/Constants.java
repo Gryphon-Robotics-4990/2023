@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import frc.robot.vision.*;
+
 import frc.robot.units.*;
 
 //-1 usually means not yet set

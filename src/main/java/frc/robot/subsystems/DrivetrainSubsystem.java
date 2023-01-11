@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DriveUtil;
-import frc.robot.commands.DriveContinuous;
+
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -35,13 +35,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX);
         
         m_gyro = new ADXRS450_Gyro();
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), new Pose2d(0, 0, newRotation2d()));
-        
+        //m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), new Pose2d(0, 0, newRotation2d()));
+        m_odometry = null;
+
         configureMotors();
 
-        m_leftFrontTalon.setSelectedSensorPosition(0)
-        m_rightFrontTalon.setSelectedSensorPosition(0)
-        m_gyro.reset()
+        m_leftFrontTalon.setSelectedSensorPosition(0);
+        m_rightFrontTalon.setSelectedSensorPosition(0);
+        m_gyro.reset();
     }
 
     @Override
