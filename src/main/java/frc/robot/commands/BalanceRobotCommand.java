@@ -21,10 +21,11 @@ public class BalanceRobotCommand extends CommandBase {
 
     @Override
     public void execute() {
-        //double tilt = m_drivetrain.getGyroTilt();
-        double tilt = 0;
+        double tilt = m_drivetrain.getGyroTilt();
+
         // Trying to get the gyro tilt to be 0 (PID based on the gyro being the encoder)
         double val = m_pid.calculate(tilt, 0.0);
+        // After we calculate the PID percent output we need to be at
         m_drivetrain.drivePO(val, val);
     }
 

@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DriveUtil;
 
@@ -24,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class DrivetrainSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX m_leftFrontTalon, m_leftRearTalon, m_rightFrontTalon, m_rightRearTalon;
-    private final ADXRS450_Gyro m_gyro;
+    private final AHRS m_gyro;
     private final DifferentialDriveOdometry m_odometry;
 
     public DrivetrainSubsystem()
@@ -34,7 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightFrontTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX);
         m_rightRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX);
         
-        m_gyro = new ADXRS450_Gyro();
+        m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
         //m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), new Pose2d(0, 0, newRotation2d()));
         m_odometry = null;
 
@@ -58,6 +60,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightFrontTalon.set(ControlMode.PercentOutput, right);
     }
 
+    public void drive(double left, double right) {
+        m_leftFrontTalon.set(ControlMode.Velocity, left);
+        m_rightFrontTalon.set(ControlMode.Velocity, right);
+    }
+
+    public double getGyroTilt() {//Figure out which one we're using
+        return Math.max(m_gyro.getPitch(), m_gyro.getRoll());
+    }
+
     public Pose2d getPose()
     {
         return m_odometry.getPoseMeters();
@@ -71,7 +82,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
-        m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+        double leftDistance = (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * m_leftFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN);
+        double rightDistance = (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * m_rightFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN);
+        m_odometry.resetPosition(m_gyro.getRotation2d(), leftDistance, rightDistance, pose);
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts)
@@ -141,6 +154,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_leftRearTalon.setNeutralMode(mode);
         m_rightFrontTalon.setNeutralMode(mode);
         m_rightRearTalon.setNeutralMode(mode);
+
+        m_leftFrontTalon.configVoltageCompSaturation(MotorConfig.TALON_VOLTAGE_CONSTRAINT, MotorConfig.TALON_TIMEOUT_MS);
+        m_rightFrontTalon.configVoltageCompSaturation(MotorConfig.TALON_VOLTAGE_CONSTRAINT, MotorConfig.TALON_TIMEOUT_MS);
 
         //Configure talons
         m_leftFrontTalon.configAllSettings(cLeft);

@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
+import edu.wpi.first.wpilibj.SPI;
+
 import frc.robot.units.*;
 
 //-1 usually means not yet set
@@ -22,6 +24,8 @@ public final class Constants {
         public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = -1;
         public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = -1;
         public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = -1;
+
+        public static SPI.Port SPI_PORT_GYRO = SPI.Port.kMXP;
         
     }
 
@@ -38,9 +42,8 @@ public final class Constants {
     public static class RobotMeasurements {
         //TODO find robot physical characteristics
         public static double DRIVETRAIN_TRACKWIDTH = -1;
-        public static double DRIVETRAIN_WHEEL_RADIUS = 3;
-        public static double DRIVETRAIN_WHEEL_RADIUS_FT = 0.25;
-        public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_FT * Units.FEET.to(Units.METER);
+        public static double DRIVETRAIN_WHEEL_RADIUS_IN = 3;
+        public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * Units.INCH.to(Units.METER);
         public static double DRIVETRAIN_TRACKWIDTH_METERS = -1;
     }
     
