@@ -1,5 +1,5 @@
 # Ignore the build directories
-/.gradle
+/.gradle/*
 /build
 /bin
 

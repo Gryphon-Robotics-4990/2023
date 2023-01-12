@@ -25,6 +25,9 @@ public final class Constants {
         public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = -1;
         public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = -1;
 
+        public static int CAN_GRABBER_LEFT_SPARKMAX = -1;
+        public static int CAN_GRABBER_RIGHT_SPARKMAX = -1;    
+
         public static SPI.Port SPI_PORT_GYRO = SPI.Port.kMXP;
         
     }
@@ -96,8 +99,10 @@ public final class Constants {
         public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
         public static TalonSRXGains TEST_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
         public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains GRABBER_PID = new TalonSRXGains(0, 0, 0);
         // Tune this by hooking up phoenix tuner
         public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
+
         
         //Feedforward
          
