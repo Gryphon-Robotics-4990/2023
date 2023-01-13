@@ -8,17 +8,17 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
-public class Grabber extends SubsystemBase {
+public class GrabberSubsystem extends SubsystemBase {
     //Creates motors and pidcontroller
     private CANSparkMax grabberLeft, grabberRight;
     private SparkMaxPIDController pidController;
 
-    public Grabber() {
+    public GrabberSubsystem() {
         //Instantiates two SparkMax motors
         grabberLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
         grabberRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
 
-        //Runs connfigureMotoes
+        //Runs connfigureMotors
         configureMotors();
     }
 
