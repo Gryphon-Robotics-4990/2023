@@ -37,8 +37,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX);
         
         m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
-        //m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), new Pose2d(0, 0, newRotation2d()));
-        m_odometry = null;
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0, new Pose2d(0, 0, m_gyro.getRotation2d()));
 
         configureMotors();
 
@@ -89,7 +88,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void tankDriveVolts(double leftVolts, double rightVolts)
     {
-        drivePO(leftVolts/MotorConfig.TALON_VOLTAGE_CONSTRAINT, rightVolts/MotorConfig.TALON_VOLTAGE_CONSTRAINT);
+        m_leftFrontTalon.setVoltage(leftVolts);
+        m_rightFrontTalon.setVoltage(rightVolts);
     }
 
     public void resetEncoders()
@@ -154,9 +154,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_leftRearTalon.setNeutralMode(mode);
         m_rightFrontTalon.setNeutralMode(mode);
         m_rightRearTalon.setNeutralMode(mode);
-
-        m_leftFrontTalon.configVoltageCompSaturation(MotorConfig.TALON_VOLTAGE_CONSTRAINT, MotorConfig.TALON_TIMEOUT_MS);
-        m_rightFrontTalon.configVoltageCompSaturation(MotorConfig.TALON_VOLTAGE_CONSTRAINT, MotorConfig.TALON_TIMEOUT_MS);
 
         //Configure talons
         m_leftFrontTalon.configAllSettings(cLeft);

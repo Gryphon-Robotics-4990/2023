@@ -16,14 +16,16 @@ import frc.robot.units.*;
 public final class Constants {
     public static class Ports {
         //Laptop ports
-        public static int PORT_JOYSTICK_DRIVE = 0;
+        // Test drive joystick laptop port to figure out wtf is wrong with auto
+        public static int PORT_JOYSTICK_DRIVE = 2;
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN Bus IDs
-        public static int CAN_DRIVETRAIN_LEFT_FRONT_TALONSRX = -1;
-        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = -1;
-        public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = -1;
-        public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = -1;
+        // For test drivetrain
+        public static int CAN_DRIVETRAIN_LEFT_FRONT_TALONSRX = 10;
+        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 5;
+        public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = 15;
+        public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = 13;
 
         public static int CAN_GRABBER_LEFT_SPARKMAX = -1;
         public static int CAN_GRABBER_RIGHT_SPARKMAX = -1;    
@@ -39,7 +41,6 @@ public final class Constants {
         public static int TALON_DEFAULT_PID_ID = 0;//0 is primary, 1 is auxilary
         public static TalonSRXFeedbackDevice TALON_DEFAULT_FEEDBACK_DEVICE = TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative;
         public static FollowerType DEFAULT_MOTOR_FOLLOWER_TYPE = FollowerType.PercentOutput;
-        public static double TALON_VOLTAGE_CONSTRAINT = 12.0;
     }
 
     public static class RobotMeasurements {
@@ -108,10 +109,10 @@ public final class Constants {
          
         //All below constants in MotionControl are placeholders, need to be tuned
         //Feedforward/Feedback Gains
-        public static final double ksVolts = 0.22;
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
-        public static final double kPDriveVel = 8.5;
+        public static final double ksVolts = 1.1083;
+        public static final double kvVoltSecondsPerMeter = 28.256;
+        public static final double kaVoltSecondsSquaredPerMeter = 6.0584;
+        public static final double kPDriveVel = 7.521;
         //DifferentialDriveKinematics
         public static final double kTrackwidthMeters = 0.69;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);

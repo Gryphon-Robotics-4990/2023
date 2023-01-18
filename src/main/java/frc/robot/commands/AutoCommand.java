@@ -60,14 +60,14 @@ public class AutoCommand extends CommandBase{
             new RamseteCommand(
                 exampleTrajectory,
                 m_drivetrain::getPose,
-                new RamseteController(MotionControl.kRamseteB, MotionControl.kRamseteZeta),
+                new RamseteController(),
                 new SimpleMotorFeedforward(
                     MotionControl.ksVolts,
                     MotionControl.kvVoltSecondsPerMeter),
                 MotionControl.kDriveKinematics,
                 m_drivetrain::getWheelSpeeds,
-                new PIDController(MotionControl.TEST_DRIVETRAIN_LEFT_PID.kP, 0, 0),
-                new PIDController(MotionControl.TEST_DRIVETRAIN_RIGHT_PID.kP, 0, 0),
+                new PIDController(MotionControl.kPDriveVel, 0, 0),
+                new PIDController(MotionControl.kPDriveVel, 0, 0),
                 // RamseteCommand passes volts to the callback
                 m_drivetrain::tankDriveVolts,
                 m_drivetrain);
