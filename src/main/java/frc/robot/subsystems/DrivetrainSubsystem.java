@@ -1,27 +1,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.DriveUtil;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import static frc.robot.Constants.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.Calendar;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -41,8 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         configureMotors();
 
-        m_leftFrontTalon.setSelectedSensorPosition(0);
-        m_rightFrontTalon.setSelectedSensorPosition(0);
+        resetEncoders();
         m_gyro.reset();
     }
 
@@ -50,7 +42,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic()
     {
         var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
-        m_odometry.update(gyroAngle, m_leftFrontTalon.getSelectedSensorPosition(), m_rightFrontTalon.getSelectedSensorPosition());
+        m_odometry.update(gyroAngle, getDistanceLeft(), getDistanceRight());
     }
 
     public void drivePO(double left, double right)
@@ -60,8 +52,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void drive(double left, double right) {
-        m_leftFrontTalon.set(ControlMode.Velocity, left);
-        m_rightFrontTalon.set(ControlMode.Velocity, right);
+        m_leftFrontTalon.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(left));
+        m_rightFrontTalon.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(right));
     }
 
     public double getGyroTilt() {//Figure out which one we're using
@@ -75,19 +67,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds()
     {
-        return new DifferentialDriveWheelSpeeds(m_leftFrontTalon.getSelectedSensorVelocity(), m_rightFrontTalon.getSelectedSensorVelocity());
+        return new DifferentialDriveWheelSpeeds(m_leftFrontTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND), m_rightFrontTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
     }
 
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
-        double leftDistance = (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * m_leftFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN);
-        double rightDistance = (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * m_rightFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN);
-        m_odometry.resetPosition(m_gyro.getRotation2d(), leftDistance, rightDistance, pose);
+        m_odometry.resetPosition(m_gyro.getRotation2d(), this.getDistanceLeft(), this.getDistanceRight(), pose);
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts)
     {
+        System.out.printf("Left: %.2f, Right: %.2f\n", leftVolts, rightVolts);
         m_leftFrontTalon.setVoltage(leftVolts);
         m_rightFrontTalon.setVoltage(rightVolts);
     }
@@ -101,6 +92,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public double getAverageEncoderDistance()
     {
         return (m_leftFrontTalon.getSelectedSensorPosition() + m_rightFrontTalon.getSelectedSensorPosition())/2.0;
+    }
+
+    // Distance (meters) = wheel radius * angle traveled (in radians)
+    public double getDistanceLeft() {
+        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_leftFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
+    }
+
+    public double getDistanceRight() {
+        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_rightFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
     }
 
     public void zeroHeading()
@@ -126,12 +126,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightFrontTalon.configFactoryDefault();
         m_rightRearTalon.configFactoryDefault();
 
-        // TODO figure out whether we need to switch the encoder direction
+        // Both encoders inverted on test drivetrain
         m_leftFrontTalon.setSensorPhase(true);
         m_rightFrontTalon.setSensorPhase(true);
 
         m_rightFrontTalon.setInverted(true);
-        
+        m_rightRearTalon.setInverted(true);
+
         m_leftRearTalon.follow(m_leftFrontTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
         m_rightRearTalon.follow(m_rightFrontTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
 
@@ -143,8 +144,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         TalonSRXConfiguration cLeft = new TalonSRXConfiguration(), cRight = new TalonSRXConfiguration();
 
         //Setup config objects with desired values
-        cLeft.slot0 = MotionControl.TEST_DRIVETRAIN_LEFT_PID;
-        cRight.slot0 = MotionControl.TEST_DRIVETRAIN_RIGHT_PID;
+        // Change to actual drivetrain once we use it
+        // Using feedforward, we need to use the PID values given by SysID
+        cLeft.slot0 = MotionControl.TEST_DRIVETRAIN_FEEDFORWARD_PID;
+        cRight.slot0 = MotionControl.TEST_DRIVETRAIN_FEEDFORWARD_PID;
 
         //NeutralMode mode = NeutralMode.Brake;
         NeutralMode mode = NeutralMode.Coast;

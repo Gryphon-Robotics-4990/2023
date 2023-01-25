@@ -2,11 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.JoystickF310.*;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.TeleopArcadeDriveCommand;
+
 import static frc.robot.Constants.*;
 
 public class RobotContainer {
@@ -21,6 +24,7 @@ public class RobotContainer {
 
     //Create command objects
     private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
+    private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -31,7 +35,10 @@ public class RobotContainer {
 
     private void configureControlBindings() {
         // Set suppliers for commands with joystick axes:
-        
+        m_driveCommand.setSuppliers(
+            () -> DriveUtil.powCopySign(joystickDrive.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT),
+            () -> DriveUtil.powCopySign(joystickDrive.getRawAxis(AxisF310.JoystickRightX), JOYSTICK_TURNING_EXPONENT)
+        );
     
         // Bind binary commands to buttons:
        
@@ -39,7 +46,7 @@ public class RobotContainer {
 
     public void setTeleopDefaultCommands() {
         // Set default commands (drivetrain, elevator, slide, etc.)
-        
+        CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
     }
 
     public Command getAutonomousCommand() {

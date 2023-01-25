@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.MotionControl;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.Constants.*;
 
 public class AutoCommand extends CommandBase{
     private final DrivetrainSubsystem m_drivetrain;
@@ -28,14 +29,14 @@ public class AutoCommand extends CommandBase{
     public SequentialCommandGroup getAutonomousCommand() {
         // Create voltage constraint to ensure we don't accelerate too fast
 
-        // var autoVoltageConstraint = 
-        // new DifferentialDriveVoltageConstraint(
-        // new SimpleMotorFeedforward(
-            // MotionControl.ksVolts,
-            // MotionControl.kvVoltSecondsPerMeter,
-            // MotionControl.kaVoltSecondsSquaredPerMeter),
-        // MotionControl.kDriveKinematics,
-        // 10);
+        var autoVoltageConstraint = 
+            new DifferentialDriveVoltageConstraint(
+                new SimpleMotorFeedforward(
+                    MotionControl.ksVolts,
+                    MotionControl.kvVoltSecondsPerMeter,
+                    MotionControl.kaVoltSecondsSquaredPerMeter),
+                MotionControl.kDriveKinematics,
+                SubsystemConfig.AUTO_MAX_VOLTAGE);
 
         // Create config for trajectory
         TrajectoryConfig config = 
@@ -43,15 +44,15 @@ public class AutoCommand extends CommandBase{
                     MotionControl.kMaxSpeedMetersPerSecond,
                     MotionControl.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(MotionControl.kDriveKinematics);
+            .setKinematics(MotionControl.kDriveKinematics)
             // Apply the voltage constraint
-            // .addConstraint(autoVoltageConstraint);
+            .addConstraint(autoVoltageConstraint);
 
         // Placeholder positions
         Trajectory exampleTrajectory = 
             TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                List.of(new Translation2d(1, 0)/*, new Translation2d(2, 0)*/),
                 new Pose2d(3, 0, new Rotation2d(0)),
                 // Pass config
                 config);
@@ -66,6 +67,7 @@ public class AutoCommand extends CommandBase{
                     MotionControl.kvVoltSecondsPerMeter),
                 MotionControl.kDriveKinematics,
                 m_drivetrain::getWheelSpeeds,
+                // For auto we only need kP
                 new PIDController(MotionControl.kPDriveVel, 0, 0),
                 new PIDController(MotionControl.kPDriveVel, 0, 0),
                 // RamseteCommand passes volts to the callback

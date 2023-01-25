@@ -44,11 +44,9 @@ public final class Constants {
     }
 
     public static class RobotMeasurements {
-        //TODO find robot physical characteristics
-        public static double DRIVETRAIN_TRACKWIDTH = -1;
-        public static double DRIVETRAIN_WHEEL_RADIUS_IN = 3;
-        public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * Units.INCH.to(Units.METER);
-        public static double DRIVETRAIN_TRACKWIDTH_METERS = -1;
+        public static double DRIVETRAIN_WHEEL_RADIUS_IN = 3.0;
+        //public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * Units.INCH.to(Units.METER);
+        public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * (0.0254);
     }
     
     public static class Units {
@@ -56,13 +54,13 @@ public final class Constants {
         public static Unit METER = new BaseUnit(Dimension.Length, 1d);
         public static Unit KILOMETER = new BaseUnit(Dimension.Length, METER.getScalar() * 1000d);
         public static Unit FEET = new BaseUnit(Dimension.Length, METER.getScalar() * 3.280839895d);
-        public static Unit INCH = new BaseUnit(Dimension.Length, FEET.getScalar() * (1/12));
+        public static Unit INCH = new BaseUnit(Dimension.Length, FEET.getScalar() / 12d);
 
         public static Unit SECOND = new BaseUnit(Dimension.Time, 1d);
         public static Unit MINUTE = new BaseUnit(Dimension.Time, SECOND.getScalar() * 60d);
         public static Unit HOUR = new BaseUnit(Dimension.Time, MINUTE.getScalar() * 60d);
         public static Unit MILLISECOND = new BaseUnit(Dimension.Time, SECOND.getScalar() / 1000d);
-        public static Unit ENCODER_TIME = new BaseUnit(Dimension.Time, SECOND.getScalar() / 10d);
+        public static Unit ENCODER_TIME = new BaseUnit(Dimension.Time, MILLISECOND.getScalar() * 100d);
         
         public static Unit KILOGRAM = new BaseUnit(Dimension.Mass, 1d);
 
@@ -92,29 +90,36 @@ public final class Constants {
 
         //Drivetrain movement information
         public static double DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY = 3450;//Approx 4.03 meters per second
+        public static double AUTO_MAX_VOLTAGE = 10.0;
     }
     
     public static class MotionControl {
         //PID
         public static TalonSRXGains TEST_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
-        public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0, 0, 0);
         public static TalonSRXGains TEST_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
-        public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
+        public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0, 0, 0);
         public static TalonSRXGains GRABBER_PID = new TalonSRXGains(0, 0, 0);
         // Tune this by hooking up phoenix tuner
         public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
-
-        
-        //Feedforward
          
-        //All below constants in MotionControl are placeholders, need to be tuned
-        //Feedforward/Feedback Gains
+        // Feedforward/Feedback Gains for (test) drivetrain
+        // Measured 1.1083
+        // Theoretical value: ~0.5
         public static final double ksVolts = 1.1083;
-        public static final double kvVoltSecondsPerMeter = 28.256;
+        // Measured value: 28.256
+        // Theoretical value: 3
+        public static final double kvVoltSecondsPerMeter = 3;
+        // Ignore kA for most feedforward
         public static final double kaVoltSecondsSquaredPerMeter = 6.0584;
-        public static final double kPDriveVel = 7.521;
+        // SysID measured 7.521
+        // 0.25 is more similar to our PID tuning
+        public static final double kPDriveVel = 0.25;
+        public static final TalonSRXGains TEST_DRIVETRAIN_FEEDFORWARD_PID = new TalonSRXGains(kPDriveVel, 0, 0);
         //DifferentialDriveKinematics
-        public static final double kTrackwidthMeters = 0.69;
+        // Baseline 0.69
+        // Measured (test drivetrain) 0.6255
+        public static final double kTrackwidthMeters = 0.6255;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
         //Max Trajectory Velocity/Acceleration
         public static final double kMaxSpeedMetersPerSecond = 3;
@@ -122,17 +127,25 @@ public final class Constants {
         //Ramsete Parameters (Reasonable Baselines)
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
+
+        // Feedforward objects for drivetrain
+        // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
+        public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
     }
  
     //Driver settings
     public static double JOYSTICKF310_AXIS_DEADBAND = 0.05;
+    public static double JOYSTICK_THROTTLE_EXPONENT = 1;
+    public static double JOYSTICK_TURNING_EXPONENT = 1;
 
     //Operation config
     //@Config(name = "Rotation Input Multiplier", tabName = "Op Configuration")
-    public static double ARCADE_ROTATION_MULTIPLIER = 0.35;
+    //Original value 0.35
+    public static double ARCADE_ROTATION_MULTIPLIER = 1.0;
 
     //@Config(name = "Speed Input Multiplier", tabName = "Op Configuration")
-    public static double ARCADE_SPEED_MULTIPLIER = 0.45;
+    //Original value 0.45
+    public static double ARCADE_SPEED_MULTIPLIER = 1.0;
 
     //Classes
     public static class TalonSRXGains extends SlotConfiguration {
