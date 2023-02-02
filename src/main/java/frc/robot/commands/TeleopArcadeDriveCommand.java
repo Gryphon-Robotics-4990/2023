@@ -25,13 +25,13 @@ public class TeleopArcadeDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double[] speeds = DriveUtil.arcadeToTankDrive(m_speedSupplier.getAsDouble() * ARCADE_SPEED_MULTIPLIER, m_rotationSupplier.getAsDouble() * ARCADE_ROTATION_MULTIPLIER);
+        double[] speeds = DriveUtil.arcadeToTankDrive(m_speedSupplier.getAsDouble() * ARCADE_SPEED_MULTIPLIER, m_rotationSupplier.getAsDouble() * ARCADE_ROTATION_MULTIPLIER * 0.2);
         // Convert speeds to target speeds in meters per second, and then divide by hypothetical maximum movement speed
         // Proportion of max speed
-        speeds[0] *= SubsystemConfig.DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY;
-        speeds[1] *= SubsystemConfig.DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY;
+        //speeds[0] *= SubsystemConfig.DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY;
+        //speeds[1] *= SubsystemConfig.DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY;
         
-        m_drivetrain.drive(speeds[0], speeds[1]);
+        m_drivetrain.drivePO(speeds[0], speeds[1]);
     }
 
 }

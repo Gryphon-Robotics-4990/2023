@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,15 +19,16 @@ import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-    private final WPI_TalonSRX m_leftFrontTalon, m_leftRearTalon, m_rightFrontTalon, m_rightRearTalon;
+    private final WPI_VictorSPX m_leftFrontTalon, m_rightFrontTalon;
+    private final WPI_TalonSRX m_leftRearTalon, m_rightRearTalon;
     private final AHRS m_gyro;
     private final DifferentialDriveOdometry m_odometry;
 
     public DrivetrainSubsystem()
     {
-        m_leftFrontTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_LEFT_FRONT_TALONSRX);
+        m_leftFrontTalon = new WPI_VictorSPX(Ports.CAN_DRIVETRAIN_LEFT_FRONT_VICTOR);
         m_leftRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_LEFT_REAR_TALONSRX);
-        m_rightFrontTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX);
+        m_rightFrontTalon = new WPI_VictorSPX(Ports.CAN_DRIVETRAIN_RIGHT_FRONT_VICTOR);
         m_rightRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX);
         
         m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
@@ -47,13 +49,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void drivePO(double left, double right)
     {
-        m_leftFrontTalon.set(ControlMode.PercentOutput, left);
-        m_rightFrontTalon.set(ControlMode.PercentOutput, right);
+        m_leftRearTalon.set(ControlMode.PercentOutput, left);
+        m_rightRearTalon.set(ControlMode.PercentOutput, right);
     }
 
     public void drive(double left, double right) {
-        m_leftFrontTalon.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(left));
-        m_rightFrontTalon.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(right));
+        m_leftRearTalon.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(left));
+        m_rightRearTalon.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(right));
     }
 
     public double getGyroTilt() {//Figure out which one we're using
@@ -67,7 +69,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds()
     {
-        return new DifferentialDriveWheelSpeeds(m_leftFrontTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND), m_rightFrontTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
+        return new DifferentialDriveWheelSpeeds(m_leftRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND), m_rightRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
     }
 
     public void resetOdometry(Pose2d pose)
@@ -79,28 +81,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void tankDriveVolts(double leftVolts, double rightVolts)
     {
         System.out.printf("Left: %.2f, Right: %.2f\n", leftVolts, rightVolts);
-        m_leftFrontTalon.setVoltage(leftVolts);
-        m_rightFrontTalon.setVoltage(rightVolts);
+        m_leftRearTalon.setVoltage(leftVolts);
+        m_rightRearTalon.setVoltage(rightVolts);
     }
 
     public void resetEncoders()
     {
-        m_leftFrontTalon.setSelectedSensorPosition(0);
-        m_rightFrontTalon.setSelectedSensorPosition(0);
+        m_leftRearTalon.setSelectedSensorPosition(0);
+        m_rightRearTalon.setSelectedSensorPosition(0);
     }
 
     public double getAverageEncoderDistance()
     {
-        return (m_leftFrontTalon.getSelectedSensorPosition() + m_rightFrontTalon.getSelectedSensorPosition())/2.0;
+        return (m_leftRearTalon.getSelectedSensorPosition() + m_rightRearTalon.getSelectedSensorPosition())/2.0;
     }
 
     // Distance (meters) = wheel radius * angle traveled (in radians)
     public double getDistanceLeft() {
-        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_leftFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
+        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_leftRearTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
     }
 
     public double getDistanceRight() {
-        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_rightFrontTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
+        return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_rightRearTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
     }
 
     public void zeroHeading()
@@ -127,18 +129,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon.configFactoryDefault();
 
         // Both encoders inverted on test drivetrain
-        m_leftFrontTalon.setSensorPhase(true);
-        m_rightFrontTalon.setSensorPhase(true);
+        m_leftRearTalon.setSensorPhase(true);
+        m_rightRearTalon.setSensorPhase(true);
 
-        m_rightFrontTalon.setInverted(true);
         m_rightRearTalon.setInverted(true);
+        m_rightFrontTalon.setInverted(true);
 
-        m_leftRearTalon.follow(m_leftFrontTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
-        m_rightRearTalon.follow(m_rightFrontTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
+        m_leftFrontTalon.follow(m_leftRearTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
+        m_rightFrontTalon.follow(m_rightRearTalon, MotorConfig.DEFAULT_MOTOR_FOLLOWER_TYPE);
 
         //Setup talon built-in PID
-        m_leftFrontTalon.configSelectedFeedbackSensor(MotorConfig.TALON_DEFAULT_FEEDBACK_DEVICE, MotorConfig.TALON_DEFAULT_PID_ID, MotorConfig.TALON_TIMEOUT_MS);
-        m_rightFrontTalon.configSelectedFeedbackSensor(MotorConfig.TALON_DEFAULT_FEEDBACK_DEVICE, MotorConfig.TALON_DEFAULT_PID_ID, MotorConfig.TALON_TIMEOUT_MS);
+        m_leftRearTalon.configSelectedFeedbackSensor(MotorConfig.TALON_DEFAULT_FEEDBACK_DEVICE, MotorConfig.TALON_DEFAULT_PID_ID, MotorConfig.TALON_TIMEOUT_MS);
+        m_rightRearTalon.configSelectedFeedbackSensor(MotorConfig.TALON_DEFAULT_FEEDBACK_DEVICE, MotorConfig.TALON_DEFAULT_PID_ID, MotorConfig.TALON_TIMEOUT_MS);
         
         //Create config objects
         TalonSRXConfiguration cLeft = new TalonSRXConfiguration(), cRight = new TalonSRXConfiguration();
@@ -153,13 +155,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         NeutralMode mode = NeutralMode.Coast;
 
         //Brake mode so no coasting
-        m_leftFrontTalon.setNeutralMode(mode);
         m_leftRearTalon.setNeutralMode(mode);
-        m_rightFrontTalon.setNeutralMode(mode);
+        //m_leftFrontTalon.setNeutralMode(mode);
         m_rightRearTalon.setNeutralMode(mode);
+        //m_rightFrontTalon.setNeutralMode(mode);
 
         //Configure talons
-        m_leftFrontTalon.configAllSettings(cLeft);
-        m_rightFrontTalon.configAllSettings(cRight);
+        m_leftRearTalon.configAllSettings(cLeft);
+        m_rightRearTalon.configAllSettings(cRight);
     }
 }

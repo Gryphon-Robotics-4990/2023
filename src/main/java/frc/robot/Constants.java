@@ -22,10 +22,10 @@ public final class Constants {
 
         //CAN Bus IDs
         // For test drivetrain
-        public static int CAN_DRIVETRAIN_LEFT_FRONT_TALONSRX = 10;
-        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 5;
-        public static int CAN_DRIVETRAIN_RIGHT_FRONT_TALONSRX = 15;
-        public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = 13;
+        public static int CAN_DRIVETRAIN_LEFT_FRONT_VICTOR = 1;
+        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 0;
+        public static int CAN_DRIVETRAIN_RIGHT_FRONT_VICTOR = 3;
+        public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = 11;
 
         public static int CAN_GRABBER_LEFT_SPARKMAX = -1;
         public static int CAN_GRABBER_RIGHT_SPARKMAX = -1;    
@@ -112,22 +112,21 @@ public final class Constants {
         public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
          
         // Feedforward/Feedback Gains for (test) drivetrain
-        // Measured 1.1083
+        // Measured (2023) 0.73329
         // Theoretical value: ~0.5
-        public static final double ksVolts = 1.1083;
-        // Measured value: 28.256
+        public static final double ksVolts = 0.73329;
+        // Measured value: 2.4232
         // Theoretical value: 3
-        public static final double kvVoltSecondsPerMeter = 3;
+        public static final double kvVoltSecondsPerMeter = 2.4232;
         // Ignore kA for most feedforward
-        public static final double kaVoltSecondsSquaredPerMeter = 6.0584;
-        // SysID measured 7.521
-        // 0.25 is more similar to our PID tuning
-        public static final double kPDriveVel = 0.25;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.28801;
+
+        public static final double kPDriveVel = 0.27857;
         public static final TalonSRXGains TEST_DRIVETRAIN_FEEDFORWARD_PID = new TalonSRXGains(kPDriveVel, 0, 0);
         //DifferentialDriveKinematics
-        // Baseline 0.69
-        // Measured (test drivetrain) 0.6255
-        public static final double kTrackwidthMeters = 0.6255;
+        // Todo: measure using drivetrain angular test
+        // Measured (2023 drivetrain) 0.41
+        public static final double kTrackwidthMeters = 0.41;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
         //Max Trajectory Velocity/Acceleration
         public static final double kMaxSpeedMetersPerSecond = 3;
