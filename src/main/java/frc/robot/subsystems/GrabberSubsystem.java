@@ -18,7 +18,7 @@ public class GrabberSubsystem extends SubsystemBase {
         grabberLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
         grabberRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
 
-        //Runs connfigureMotors
+        //Runs configureMotors
         configureMotors();
     }
 

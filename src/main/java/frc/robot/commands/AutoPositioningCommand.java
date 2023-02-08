@@ -2,10 +2,6 @@ package frc.robot.commands;
 
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -23,10 +19,10 @@ import frc.robot.Constants.MotionControl;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.Constants.*;
 
-public class AutoCommand extends CommandBase{
+public class AutoPositioningCommand extends CommandBase{
     private final DrivetrainSubsystem m_drivetrain;
 
-    public AutoCommand(DrivetrainSubsystem drivetrain) {
+    public AutoPositioningCommand(DrivetrainSubsystem drivetrain){
         m_drivetrain = drivetrain;
     }
 
@@ -59,10 +55,6 @@ public class AutoCommand extends CommandBase{
                 new Pose2d(3, 0, new Rotation2d(0)),
                 // Pass config
                 config);
-        
-        //PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center Start", new PathConstraints(2, 1));
-        //PathPlannerTrajectory leftStart = PathPlanner.loadPath("Left Start", new PathConstraints(2, 1));
-        //PathPlannerTrajectory rightStart = PathPlanner.loadPath("Right Start", new PathConstraints(2, 1));
         
         RamseteCommand ramseteCommand =
             new RamseteCommand(
