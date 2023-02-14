@@ -64,11 +64,17 @@ public class VisionController {
             // If we can't find target in frame
             return new Translation2d();
         }
-
         // TODO figure out if we're using a RamseteCommand to get to the target or just PID
-        
-        
     }
 
+    public double getHorizontalAngle() {
+        PhotonPipelineResult result = this.getLatestResult();
+        if (this.hasTargets(result)) {
+            return (result.getBestTarget().getYaw());
+        } else {
+            return -1.0;
+        }
+
+    }
 
 }
