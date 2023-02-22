@@ -1,7 +1,5 @@
 package frc.robot.vision;
 
-import java.util.List;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -64,7 +62,7 @@ public class VisionController {
             // If we can't find target in frame
             return new Translation2d();
         }
-        // TODO figure out if we're using a RamseteCommand to get to the target or just PID
+        //TODO figure out if we're using a RamseteCommand to get to the target or just PID
     }
 
     public double getHorizontalAngle() {

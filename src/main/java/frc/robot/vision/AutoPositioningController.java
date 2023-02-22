@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.vision;
 
 import java.util.List;
 
@@ -19,13 +19,15 @@ import frc.robot.Constants.MotionControl;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.Constants.*;
 
-public class AutoPositioningCommand extends CommandBase{
+public class AutoPositioningController extends CommandBase{
     private final DrivetrainSubsystem m_drivetrain;
+    private final VisionController m_vision;
 
-    public AutoPositioningCommand(DrivetrainSubsystem drivetrain){
+    public AutoPositioningController(DrivetrainSubsystem drivetrain, VisionController vision){
         m_drivetrain = drivetrain;
+        m_vision = vision;
     }
-
+  
     public SequentialCommandGroup getAutonomousCommand() {
         // Create voltage constraint to ensure we don't accelerate too fast
         var autoVoltageConstraint = 
@@ -47,18 +49,33 @@ public class AutoPositioningCommand extends CommandBase{
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
+        //Arjun does not like to have long lines of code so instead here are the variables that I created for him to shorten the lines of code to prevent long lines of code from being created because as mentioned Arjun dislikes long lines of code. To be completely clear Arjun Parthasarathy does not like long lines of code and thus the code below was made to prevent this.
+        double startX = m_drivetrain.getPose().getX();
+        double startY = m_drivetrain.getPose().getY();
+        
+        double targetX = m_vision.getTranslationToTarget().getX();
+        double targetY = m_vision.getTranslationToTarget().getY();
+
+        double multiple = 2/3;
+
+        double x1 = startX + multiple*(targetX-startX); 
+        double y1 = startY + multiple*(targetY-startY);
+
         // Placeholder positions
-        Trajectory exampleTrajectory = 
+        Trajectory visionTrajectory = 
             TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
-                new Pose2d(3, 0, new Rotation2d(0)),
-                // Pass config
+                //The starting position as taken from drivetrain
+                m_drivetrain.getPose(),
+                //The middle point as calculated above
+                List.of(new Translation2d(x1, y1)),
+                //The final position as calculated above
+                new Pose2d(targetX, targetY, new Rotation2d(0)),
+                //Smash or Pass config
                 config);
         
         RamseteCommand ramseteCommand =
             new RamseteCommand(
-                exampleTrajectory,
+                visionTrajectory,
                 m_drivetrain::getPose,
                 new RamseteController(),
                 new SimpleMotorFeedforward(
@@ -74,7 +91,7 @@ public class AutoPositioningCommand extends CommandBase{
                 m_drivetrain);
                 
         // Reset odometry to the starting pose of the trajectory
-        m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+        m_drivetrain.resetOdometry(visionTrajectory.getInitialPose());
 
         // Run path following command, then stop at the end
         return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
