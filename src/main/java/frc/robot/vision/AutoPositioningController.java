@@ -27,6 +27,14 @@ public class AutoPositioningController extends CommandBase{
         m_drivetrain = drivetrain;
         m_vision = vision;
     }
+
+    public DrivetrainSubsystem getDrivetrain (){
+        return(m_drivetrain);
+    }
+
+    public VisionController getVision (){
+        return(m_vision);
+    }
   
     public SequentialCommandGroup getAutonomousCommand() {
         // Create voltage constraint to ensure we don't accelerate too fast
