@@ -27,6 +27,8 @@ public final class Constants {
         public static int CAN_DRIVETRAIN_RIGHT_FRONT_VICTOR = 3;
         public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = 11;
 
+        public static int CAN_INTAKE_SPARKMAX = -1;
+
         public static int CAN_GRABBER_LEFT_SPARKMAX = -1;
         public static int CAN_GRABBER_RIGHT_SPARKMAX = -1;    
 
