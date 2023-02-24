@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -60,13 +61,13 @@ public class AutoCommand extends CommandBase{
                 // Pass config
                 config);
         
-        //PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center Start", new PathConstraints(2, 1));
-        //PathPlannerTrajectory leftStart = PathPlanner.loadPath("Left Start", new PathConstraints(2, 1));
-        //PathPlannerTrajectory rightStart = PathPlanner.loadPath("Right Start", new PathConstraints(2, 1));
+        PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center_Start", new PathConstraints(2, 1));
+        PathPlannerTrajectory leftStart = PathPlanner.loadPath("Left_Start", new PathConstraints(2, 1));
+        PathPlannerTrajectory rightStart = PathPlanner.loadPath("Right_Start", new PathConstraints(2, 1));
         
         RamseteCommand ramseteCommand =
             new RamseteCommand(
-                exampleTrajectory,
+                centerStart,
                 m_drivetrain::getPose,
                 new RamseteController(),
                 new SimpleMotorFeedforward(
@@ -82,7 +83,7 @@ public class AutoCommand extends CommandBase{
                 m_drivetrain);
                 
         // Reset odometry to the starting pose of the trajectory
-        m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+        m_drivetrain.resetOdometry(centerStart.getInitialPose());
 
         // Run path following command, then stop at the end
         return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
