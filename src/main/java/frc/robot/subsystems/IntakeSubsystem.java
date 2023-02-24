@@ -23,5 +23,9 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.set(percent_output);
     }
 
+    public double intakeCurrentDraw() {
+        return intake.getOutputCurrent();
+    }
+
 
 }

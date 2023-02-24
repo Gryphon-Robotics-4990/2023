@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.JoystickF310.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TeleopArcadeDriveCommand;
 
 import static frc.robot.Constants.*;
@@ -22,12 +24,14 @@ public class RobotContainer {
 
     // Create subsystem objects
     private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-    private final ArmSubsystem m_armsubsystem = new ArmSubsystem();
+    private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
     //Create command objects
     private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
     private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
-    private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_armsubsystem);
+    private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_arm);
+    private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intake);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -47,7 +51,7 @@ public class RobotContainer {
             () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT)
         );
         // Bind binary commands to buttons:
-       
+       joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeCommand);
     }
 
     public void setTeleopDefaultCommands() {
