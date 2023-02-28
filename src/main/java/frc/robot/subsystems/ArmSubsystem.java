@@ -7,17 +7,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
+import frc.robot.vision.VisionController;
+
 import static frc.robot.Constants.*;
 
 public class ArmSubsystem extends SubsystemBase{
     private CANSparkMax armLeft, armRight;
     private SparkMaxPIDController pidController;
+    private VisionController m_vision;
 
-    public ArmSubsystem() {
+    public ArmSubsystem(VisionController vision) {
         //Instantiates two SparkMax motors
         armLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
         armRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
-
+        m_vision = vision;
         //Runs configureMotors
         configureMotors();
     }
@@ -47,6 +50,14 @@ public class ArmSubsystem extends SubsystemBase{
     //Hell if I know :/ 
     public void armPercentOutput(double percent_output) {
         armRight.set(percent_output);
+    }
+
+    @Override
+    public void periodic() {
+        System.out.printf("%fDistance: %n", m_vision.getDistanceToTarget());
+        System.out.printf("%fX: %n", m_vision.getTranslationToTarget().getX());
+        System.out.printf("%fY: %n", m_vision.getTranslationToTarget().getY());
+        System.out.printf("%fAngle: %n", m_vision.getHorizontalAngle());
     }
 
 }

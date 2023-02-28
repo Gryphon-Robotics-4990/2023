@@ -8,6 +8,9 @@ import frc.robot.JoystickF310.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.vision.AutoPositioningCommand;
+import frc.robot.vision.AutoPositioningController;
+import frc.robot.vision.VisionController;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.IntakeCommand;
@@ -22,10 +25,15 @@ public class RobotContainer {
     private final JoystickF310 joystickDrive = new JoystickF310(Ports.PORT_JOYSTICK_DRIVE);
     private final JoystickF310 joystickOperator = new JoystickF310(Ports.PORT_JOYSTICK_OPERATOR);
 
+    private final VisionController m_vision = new VisionController();
+
     // Create subsystem objects
     private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-    private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final ArmSubsystem m_arm = new ArmSubsystem(m_vision);
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
+
+    private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
+    private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
 
     //Create command objects
     private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);

@@ -12,7 +12,7 @@ public class IntakeCommand extends CommandBase {
         addRequirements(m_intake);
     }
 
-    @Override
+    /*@Override
     public void initialize() {
         m_intake.intake();
     }
@@ -20,5 +20,5 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.outtake();
-    }
+    }*/
 }
