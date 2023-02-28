@@ -53,7 +53,7 @@ public final class Constants {
         public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * (0.0254);
 
         // Height of camera off the ground
-        public static double CAMERA_HEIGHT_METERS = -1.0;
+        public static double CAMERA_HEIGHT_METERS = 1.2954;
         // Pitch of camera on robot (probably 0 if we mount it properly)
         public static double CAMERA_PITCH_RADIANS = 0.0;
         // Height of the AprilTag off the ground (find from field measurements)
