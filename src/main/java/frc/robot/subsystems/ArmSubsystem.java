@@ -7,37 +7,46 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
-import frc.robot.Constants.SubsystemConfig;
+import static frc.robot.Constants.*;
 
 public class ArmSubsystem extends SubsystemBase{
     private CANSparkMax armLeft, armRight;
     private SparkMaxPIDController pidController;
 
-private void configureMotors() {
-    //Set motor to default 
-    armLeft.restoreFactoryDefaults();
-    armRight.restoreFactoryDefaults();
-    
-    //PID Stuff 
-    pidController.setP(MotionControl.ARM_PID.kP);
-    pidController.setI(MotionControl.ARM_PID.kI);
-    pidController.setD(MotionControl.ARM_PID.kD);
+    public ArmSubsystem() {
+        //Instantiates two SparkMax motors
+        armLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
+        armRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
 
-    //Inverts right motor; left follows right
-    armRight.setInverted(true);
-    armLeft.follow(armRight); 
+        //Runs configureMotors
+        configureMotors();
+    }
 
-}
-//Takes in some degree out of 360 
-public void moveToPosition(double position) {
-    //This doesn't take into account gear ratio 
-    //IN ROTATIONS
-    pidController.setReference(position, ControlType.kPosition);
-}
+    private void configureMotors() {
+        //Set motor to default 
+        armLeft.restoreFactoryDefaults();
+        armRight.restoreFactoryDefaults();
+        
+        //PID Stuff 
+        pidController.setP(MotionControl.ARM_PID.kP);
+        pidController.setI(MotionControl.ARM_PID.kI);
+        pidController.setD(MotionControl.ARM_PID.kD);
 
-//Hell if I know :/ 
-public void armPercentOutput(double percent_output) {
-    armRight.set(percent_output);
-}
+        //Inverts right motor; left follows right
+        armRight.setInverted(true);
+        armLeft.follow(armRight); 
+
+    }
+    //Takes in some degree out of 360 
+    public void moveToPosition(double position) {
+        //This doesn't take into account gear ratio 
+        //IN ROTATIONS
+        pidController.setReference(position, ControlType.kPosition);
+    }
+
+    //Hell if I know :/ 
+    public void armPercentOutput(double percent_output) {
+        armRight.set(percent_output);
+    }
 
 }
