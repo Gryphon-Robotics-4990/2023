@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -125,6 +127,8 @@ public final class Constants {
         // Measured value: 2.4232
         // Theoretical value: 3
         public static final double kvVoltSecondsPerMeter = 2.4232;
+        // KG is TBD
+        public static final double kG = -1.0;
         // Ignore kA for most feedforward
         public static final double kaVoltSecondsSquaredPerMeter = 0.28801;
 
@@ -145,6 +149,9 @@ public final class Constants {
         // Feedforward objects for drivetrain
         // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
         public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
+        //Feedforward objects for arm
+        public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(ksVolts, kG, kvVoltSecondsPerMeter);
+
     }
  
     //Driver settings

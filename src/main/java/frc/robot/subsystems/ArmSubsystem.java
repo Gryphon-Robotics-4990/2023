@@ -41,8 +41,10 @@ public class ArmSubsystem extends SubsystemBase{
     public void moveToPosition(double position) {
         //This doesn't take into account gear ratio 
         //IN ROTATIONS
-        pidController.setReference(position, ControlType.kPosition);
-    }
+        // Velociity and acceleration for Arm feedforward is 0
+        pidController.setReference(position, ControlType.kPosition, 0, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(position, 0));
+       }
+    
 
     //Hell if I know :/ 
     public void armPercentOutput(double percent_output) {
