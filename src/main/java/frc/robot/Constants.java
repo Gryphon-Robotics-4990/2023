@@ -36,6 +36,9 @@ public final class Constants {
 
         public static SPI.Port SPI_PORT_GYRO = SPI.Port.kMXP;
         
+        //Sensors
+        public static int DIO_FRONT_LIMIT_SWITCH = 8;
+        public static int DIO_BACK_LIMIT_SWITCH = 9;
     }
 
     public static class MotorConfig {
