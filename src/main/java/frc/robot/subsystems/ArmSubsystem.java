@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
 import frc.robot.vision.VisionController;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import static frc.robot.Constants.*;
 
@@ -15,12 +16,19 @@ public class ArmSubsystem extends SubsystemBase{
     private CANSparkMax armLeft, armRight;
     private SparkMaxPIDController pidController;
     private VisionController m_vision;
+    private DigitalInput m_frontLimit, m_backLimit;
+
 
     public ArmSubsystem(VisionController vision) {
         //Instantiates two SparkMax motors
         armLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
         armRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
         m_vision = vision;
+
+        //Creates two Limit Switches
+        m_frontLimit = new DigitalInput(Ports.DIO_FRONT_LIMIT_SWITCH);
+        m_backLimit = new DigitalInput(Ports.DIO_FRONT_LIMIT_SWITCH);
+
         //Runs configureMotors
         configureMotors();
     }
@@ -40,12 +48,20 @@ public class ArmSubsystem extends SubsystemBase{
         armLeft.follow(armRight); 
 
     }
-    //Takes in some degree out of 360 
+
+    public boolean isArmAtLimit() {
+       // checks if either of the limit switch is triggered 
+        return m_frontLimit.get() || m_backLimit.get();
+ 
+
+    }
+    //Takes in some radians
     public void moveToPosition(double position) {
-        //This doesn't take into account gear ratio 
-        //IN ROTATIONS
-        // Velociity and acceleration for Arm feedforward is 0
-        pidController.setReference(position, ControlType.kPosition, 0, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(position, 0));
+        //Velociity and acceleration for Arm feedforward is 0
+        double m_offsetposition = position-90;
+        double m_positionRotations = position*Units.RADIAN.to(Units.REVOLUTION);
+        double m_feedforeward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
+        pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforeward);
        }
     
 

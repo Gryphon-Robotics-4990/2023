@@ -2,7 +2,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.ArmSubsystem;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.TeleopArcadeDriveCommand;
 
 public class ArmManualCommand extends CommandBase {
     private final ArmSubsystem m_armsubsystem;
@@ -20,7 +19,11 @@ public class ArmManualCommand extends CommandBase {
     @Override
     public void execute() {
         double speed = m_joystickSupplier.getAsDouble(); 
-        m_armsubsystem.armPercentOutput(speed);
-    }
-   
+        // If the does not arm trips the limit switch move the armm, otherwise set output to 0
+        if (!m_armsubsystem.isArmAtLimit()) {
+            m_armsubsystem.armPercentOutput(speed);
+        } else {
+            m_armsubsystem.armPercentOutput(0);
+        }
+    };
 }
