@@ -15,7 +15,7 @@ public class VisionController {
     PhotonCamera m_camera;
 
     public VisionController() {
-        m_camera = new PhotonCamera("photonvision");
+        m_camera = new PhotonCamera("OV5647");
     }
     
     public PhotonPipelineResult getLatestResult() {
@@ -69,6 +69,16 @@ public class VisionController {
         PhotonPipelineResult result = this.getLatestResult();
         if (this.hasTargets(result)) {
             return (result.getBestTarget().getYaw());
+        } else {
+            return -1.0;
+        }
+
+    }
+
+    public double getVerticalAngle() {
+        PhotonPipelineResult result = this.getLatestResult();
+        if (this.hasTargets(result)) {
+            return (result.getBestTarget().getPitch());
         } else {
             return -1.0;
         }

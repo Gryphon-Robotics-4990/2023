@@ -13,7 +13,10 @@ import frc.robot.vision.AutoPositioningController;
 import frc.robot.vision.VisionController;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.AutoCommand;
-import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeCubeCommand;
+import frc.robot.commands.OuttakeCubeCommand;
+import frc.robot.commands.IntakeConeCommand;
+import frc.robot.commands.OuttakeConeCommand;
 import frc.robot.commands.TeleopArcadeDriveCommand;
 
 import static frc.robot.Constants.*;
@@ -32,14 +35,17 @@ public class RobotContainer {
     private final ArmSubsystem m_arm = new ArmSubsystem(m_vision);
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
-    private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
-    private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
+    //private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
+    //private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
 
     //Create command objects
     private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
     private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
     private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_arm);
-    private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intake);
+    private final IntakeCubeCommand m_intakeCubeCommand = new IntakeCubeCommand(m_intake);
+    private final OuttakeCubeCommand m_outtakeCubeCommand = new OuttakeCubeCommand(m_intake);
+    private final IntakeConeCommand m_intakeConeCommand = new IntakeConeCommand(m_intake);
+    private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -59,12 +65,16 @@ public class RobotContainer {
             () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT)
         );
         // Bind binary commands to buttons:
-       joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeCommand);
+        joystickOperator.getButton(ButtonF310.B).toggleOnTrue(m_intakeCubeCommand);
+        joystickOperator.getButton(ButtonF310.X).toggleOnTrue(m_outtakeCubeCommand);
+        joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeConeCommand);
+        joystickOperator.getButton(ButtonF310.Y).toggleOnTrue(m_outtakeConeCommand);
     }
 
     public void setTeleopDefaultCommands() {
         // Set default commands (drivetrain, elevator, slide, etc.)
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
+        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
     }
 
     public Command getAutonomousCommand() {

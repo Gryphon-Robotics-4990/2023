@@ -148,17 +148,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //Setup config objects with desired values
         // Change to actual drivetrain once we use it
         // Using feedforward, we need to use the PID values given by SysID
-        cLeft.slot0 = MotionControl.TEST_DRIVETRAIN_FEEDFORWARD_PID;
-        cRight.slot0 = MotionControl.TEST_DRIVETRAIN_FEEDFORWARD_PID;
+        cLeft.slot0 = MotionControl.DRIVETRAIN_LEFT_PID;
+        cRight.slot0 = MotionControl.DRIVETRAIN_RIGHT_PID;
 
         //NeutralMode mode = NeutralMode.Brake;
         NeutralMode mode = NeutralMode.Coast;
 
         //Brake mode so no coasting
         m_leftRearTalon.setNeutralMode(mode);
-        //m_leftFrontTalon.setNeutralMode(mode);
+        m_leftFrontTalon.setNeutralMode(mode);
         m_rightRearTalon.setNeutralMode(mode);
-        //m_rightFrontTalon.setNeutralMode(mode);
+        m_rightFrontTalon.setNeutralMode(mode);
 
         //Configure talons
         m_leftRearTalon.configAllSettings(cLeft);

@@ -25,14 +25,14 @@ public final class Constants {
         //CAN Bus IDs
         // For test drivetrain
         public static int CAN_DRIVETRAIN_LEFT_FRONT_VICTOR = 1;
-        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 0;
+        public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 15;
         public static int CAN_DRIVETRAIN_RIGHT_FRONT_VICTOR = 3;
         public static int CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX = 11;
 
-        public static int CAN_INTAKE_SPARKMAX = -1;
+        public static int CAN_INTAKE_SPARKMAX = 8;
 
-        public static int CAN_GRABBER_LEFT_SPARKMAX = -1;
-        public static int CAN_GRABBER_RIGHT_SPARKMAX = -1;    
+        public static int CAN_ARM_LEFT_SPARKMAX = 4;
+        public static int CAN_ARM_RIGHT_SPARKMAX = 2;    
 
         public static SPI.Port SPI_PORT_GYRO = SPI.Port.kMXP;
         
@@ -56,11 +56,13 @@ public final class Constants {
         public static double DRIVETRAIN_WHEEL_RADIUS_METERS = DRIVETRAIN_WHEEL_RADIUS_IN * (0.0254);
 
         // Height of camera off the ground
-        public static double CAMERA_HEIGHT_METERS = 1.2954;
+        public static double CAMERA_HEIGHT_METERS = 1.3081;
         // Pitch of camera on robot (probably 0 if we mount it properly)
-        public static double CAMERA_PITCH_RADIANS = 0.0;
+        //public static double CAMERA_PITCH_RADIANS = 0.00872665;
+        public static double CAMERA_PITCH_RADIANS = 0;
         // Height of the AprilTag off the ground (find from field measurements)
-        public static double TARGET_HEIGHT_METERS = -1;
+        // It's 1.93 right now because that was the height of the tag when I tested it (but it results in negative distances)
+        public static double TARGET_HEIGHT_METERS = 1.3716;
 
     }
     
@@ -99,6 +101,7 @@ public final class Constants {
         public static Unit JOULE = new CompoundUnit(new Unit[] {NEWTON, METER}, new Unit[] {});
         public static Unit COULOMB = new CompoundUnit(new Unit[] {AMPERE, SECOND}, new Unit[] {});
         public static Unit VOLTAGE = new CompoundUnit(JOULE, COULOMB);
+        
     }
 
     public static class SubsystemConfig {
@@ -113,9 +116,8 @@ public final class Constants {
     public static class MotionControl {
         //PID
         public static TalonSRXGains TEST_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.2, 0.0033, 12);
-        public static TalonSRXGains ACTUAL_DRIVETRAIN_LEFT_PID = new TalonSRXGains(0, 0, 0);
         public static TalonSRXGains TEST_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.2, 0.0033, 12);
-        public static TalonSRXGains ACTUAL_DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0, 0, 0);
+        // Actual PID values for drivetrain are below next to feedforward
         public static TalonSRXGains GRABBER_PID = new TalonSRXGains(0, 0, 0);
         // Tune this by hooking up phoenix tuner
         public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
@@ -130,15 +132,19 @@ public final class Constants {
         // Measured value: 2.4232
         // Theoretical value: 3
         public static final double kvVoltSecondsPerMeter = 2.4232;
-        // KG is TBD
-        public static final double kG = -1.0;
         // Ignore kA for most feedforward
         public static final double kaVoltSecondsSquaredPerMeter = 0.28801;
+        
+        // Theoretical values from ReCalc
+        public static final double armkS = 3.0;
+        public static final double armkV = 3.90;
+        public static final double armkG = 0.36;
 
-        public static final double kPDriveVel = 0.27857;
-        public static final TalonSRXGains TEST_DRIVETRAIN_FEEDFORWARD_PID = new TalonSRXGains(kPDriveVel, 0, 0);
-        //DifferentialDriveKinematics
-        // Todo: measure using drivetrain angular test
+        // Drivetrain PID measured from SysId
+        public static final double drivekP = 0.27857;
+        public static final double drivekD = 0.0;
+        
+        // TODO: measure using drivetrain angular test
         // Measured (2023 drivetrain) 0.41
         public static final double kTrackwidthMeters = 0.41;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
@@ -152,8 +158,10 @@ public final class Constants {
         // Feedforward objects for drivetrain
         // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
         public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
+        public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(drivekP, 0, drivekD);
+        public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0, drivekD);
         //Feedforward objects for arm
-        public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(ksVolts, kG, kvVoltSecondsPerMeter);
+        public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
 
     }
  
@@ -164,12 +172,11 @@ public final class Constants {
 
     //Operation config
     //@Config(name = "Rotation Input Multiplier", tabName = "Op Configuration")
-    //Original value 0.35
-    public static double ARCADE_ROTATION_MULTIPLIER = 1.0;
+    public static double ARCADE_ROTATION_MULTIPLIER = 1;
 
     //@Config(name = "Speed Input Multiplier", tabName = "Op Configuration")
     //Original value 0.45
-    public static double ARCADE_SPEED_MULTIPLIER = 1.0;
+    public static double ARCADE_SPEED_MULTIPLIER = 0.4;
 
     //Classes
     public static class TalonSRXGains extends SlotConfiguration {

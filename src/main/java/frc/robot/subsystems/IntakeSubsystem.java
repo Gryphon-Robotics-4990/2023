@@ -17,6 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void configureMotors() {
         intake.restoreFactoryDefaults();
+        intake.setInverted(true);
     }
 
     public void intakePercentOutput(double percent_output) {

@@ -74,9 +74,8 @@ public class AutoCommand extends CommandBase{
                     MotionControl.kvVoltSecondsPerMeter),
                 MotionControl.kDriveKinematics,
                 m_drivetrain::getWheelSpeeds,
-                // For auto we only need kP
-                new PIDController(MotionControl.kPDriveVel, 0, 0),
-                new PIDController(MotionControl.kPDriveVel, 0, 0),
+                new PIDController(MotionControl.drivekP, 0, MotionControl.drivekD),
+                new PIDController(MotionControl.drivekP, 0, MotionControl.drivekD),
                 // RamseteCommand passes volts to the callback
                 m_drivetrain::tankDriveVolts,
                 m_drivetrain);

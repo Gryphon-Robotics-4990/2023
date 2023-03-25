@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
 import frc.robot.vision.VisionController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 
 import static frc.robot.Constants.*;
 
@@ -17,17 +18,23 @@ public class ArmSubsystem extends SubsystemBase{
     private SparkMaxPIDController pidController;
     private VisionController m_vision;
     private DigitalInput m_frontLimit, m_backLimit;
+    private Timer m_timer;
 
 
     public ArmSubsystem(VisionController vision) {
         //Instantiates two SparkMax motors
-        armLeft = new CANSparkMax(Ports.CAN_GRABBER_LEFT_SPARKMAX, MotorType.kBrushless);
-        armRight = new CANSparkMax(Ports.CAN_GRABBER_RIGHT_SPARKMAX, MotorType.kBrushless);
+        armLeft = new CANSparkMax(Ports.CAN_ARM_LEFT_SPARKMAX, MotorType.kBrushless);
+        armRight = new CANSparkMax(Ports.CAN_ARM_RIGHT_SPARKMAX, MotorType.kBrushless);
         m_vision = vision;
+
+        m_timer = new Timer();
+        m_timer.start();
 
         //Creates two Limit Switches
         m_frontLimit = new DigitalInput(Ports.DIO_FRONT_LIMIT_SWITCH);
-        m_backLimit = new DigitalInput(Ports.DIO_FRONT_LIMIT_SWITCH);
+        m_backLimit = new DigitalInput(Ports.DIO_BACK_LIMIT_SWITCH);
+        
+        pidController = armRight.getPIDController();
 
         //Runs configureMotors
         configureMotors();
@@ -43,25 +50,23 @@ public class ArmSubsystem extends SubsystemBase{
         pidController.setI(MotionControl.ARM_PID.kI);
         pidController.setD(MotionControl.ARM_PID.kD);
 
-        //Inverts right motor; left follows right
-        armRight.setInverted(true);
-        armLeft.follow(armRight); 
-
+        //Left follows right
+        armLeft.follow(armRight, true);
     }
 
     public boolean isArmAtLimit() {
        // checks if either of the limit switch is triggered 
-        return m_frontLimit.get() || m_backLimit.get();
+        return (m_frontLimit.get() || m_backLimit.get());
  
 
     }
     //Takes in some radians
     public void moveToPosition(double position) {
-        //Velociity and acceleration for Arm feedforward is 0
-        double m_offsetposition = position-90;
+        // Velocity and acceleration for Arm feedforward is 0
+        double m_offsetposition = position - 90.0;
         double m_positionRotations = position*Units.RADIAN.to(Units.REVOLUTION);
-        double m_feedforeward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
-        pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforeward);
+        double m_feedforward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
+        pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforward);
        }
     
 
@@ -72,10 +77,12 @@ public class ArmSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        System.out.printf("%fDistance: %n", m_vision.getDistanceToTarget());
-        System.out.printf("%fX: %n", m_vision.getTranslationToTarget().getX());
-        System.out.printf("%fY: %n", m_vision.getTranslationToTarget().getY());
-        System.out.printf("%fAngle: %n", m_vision.getHorizontalAngle());
+        //System.out.println(m_vision.getLatestResult().hasTargets());
+        //System.out.printf("Distance: %f %n", m_vision.getDistanceToTarget());
+        //System.out.printf("X: %f %n", m_vision.getTranslationToTarget().getX());
+        //System.out.printf("Y: %f %n", m_vision.getTranslationToTarget().getY());
+        //System.out.printf("Horizontal Angle: %f %n", m_vision.getHorizontalAngle());
+        //System.out.printf("Vertical Angle: %f %n", m_vision.getVerticalAngle());
+        //m_timer.delay(1);
     }
-
 }
