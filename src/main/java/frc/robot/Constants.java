@@ -63,6 +63,7 @@ public final class Constants {
         // Height of the AprilTag off the ground (find from field measurements)
         // It's 1.93 right now because that was the height of the tag when I tested it (but it results in negative distances)
         public static double TARGET_HEIGHT_METERS = 1.3716;
+        public static double ARM_MOTION_REDUCTION = 288.0;
 
     }
     
@@ -110,6 +111,15 @@ public final class Constants {
         public static double DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY = 3450;//Approx 4.03 meters per second
         public static double AUTO_MAX_VOLTAGE = 10.0;
         //Arm movement information 
+        public static double kIz = 0.0;
+        public static double kFF = 0.0;
+        public static double kMaxOutput = 0.0;
+        public static double kMinOutput = 0.0;
+        public static double maxRPM = 0.0;
+        public static double maxVel = 0.0; //RPM
+        public static double minVel = 0.0;
+        public static double maxAcc = 0.0;
+        public static double allowedErr = 0.0;
         public static double ARM_MAXIMUM_VELOCITY = 5;//in RPM; to be determined!!!
     }
     
@@ -162,6 +172,7 @@ public final class Constants {
         public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0, drivekD);
         //Feedforward objects for arm
         public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
+
 
     }
  
