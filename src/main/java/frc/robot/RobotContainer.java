@@ -12,6 +12,8 @@ import frc.robot.vision.AutoPositioningCommand;
 import frc.robot.vision.AutoPositioningController;
 import frc.robot.vision.VisionController;
 import frc.robot.commands.ArmManualCommand;
+import frc.robot.commands.ArmPercentOutputCommand;
+import frc.robot.commands.ArmPlaceCommand;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.IntakeCubeCommand;
 import frc.robot.commands.OuttakeCubeCommand;
@@ -42,6 +44,8 @@ public class RobotContainer {
     private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
     private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
     private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_arm);
+    private final ArmPercentOutputCommand m_armPercentOutputCommand = new ArmPercentOutputCommand(m_arm);
+    private final ArmPlaceCommand m_armPlaceCommand = new ArmPlaceCommand(m_arm);
     private final IntakeCubeCommand m_intakeCubeCommand = new IntakeCubeCommand(m_intake);
     private final OuttakeCubeCommand m_outtakeCubeCommand = new OuttakeCubeCommand(m_intake);
     private final IntakeConeCommand m_intakeConeCommand = new IntakeConeCommand(m_intake);
@@ -69,6 +73,7 @@ public class RobotContainer {
         joystickOperator.getButton(ButtonF310.X).toggleOnTrue(m_outtakeCubeCommand);
         joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeConeCommand);
         joystickOperator.getButton(ButtonF310.Y).toggleOnTrue(m_outtakeConeCommand);
+        //joystickOperator.getButton(ButtonF310.).toggleOnTrue(m_armPlaceCommand);
     }
 
     public void setTeleopDefaultCommands() {

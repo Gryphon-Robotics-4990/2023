@@ -74,14 +74,13 @@ public class ArmSubsystem extends SubsystemBase{
  
 
     }
-    //Takes in some degrees
-    public void moveToPosition(double degrees) {
+    //Takes in number of rotations for arm (without gear reduction)
+    public void moveToPosition(double setPoint) {
         // Velocity and acceleration for Arm feedforward is 0
         //double m_offsetposition = position - 90.0;
         //double m_positionRotations = position*Units.RADIAN.to(Units.REVOLUTION);
         //double m_feedforward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
         //m_pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforward);
-        double setPoint = degrees * Units.DEGREE.to(Units.REVOLUTION) * RobotMeasurements.ARM_MOTION_REDUCTION;
         m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
        }
     
@@ -89,6 +88,10 @@ public class ArmSubsystem extends SubsystemBase{
     //Hell if I know :/ 
     public void armPercentOutput(double percent_output) {
         armRight.set(percent_output);
+    }
+
+    public double getPosition() {
+        return (m_encoder.getPosition());
     }
 
     @Override
