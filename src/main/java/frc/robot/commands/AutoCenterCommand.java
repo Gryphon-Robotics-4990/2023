@@ -23,10 +23,10 @@ import frc.robot.Constants.MotionControl;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.Constants.*;
 
-public class AutoCommand extends CommandBase{
+public class AutoCenterCommand extends CommandBase{
     private final DrivetrainSubsystem m_drivetrain;
 
-    public AutoCommand(DrivetrainSubsystem drivetrain) {
+    public AutoCenterCommand(DrivetrainSubsystem drivetrain) {
         m_drivetrain = drivetrain;
     }
 
@@ -61,8 +61,6 @@ public class AutoCommand extends CommandBase{
                 config);
         
         PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center_Start", new PathConstraints(2, 1));
-        PathPlannerTrajectory leftStart = PathPlanner.loadPath("Left_Start", new PathConstraints(2, 1));
-        PathPlannerTrajectory rightStart = PathPlanner.loadPath("Right_Start", new PathConstraints(2, 1));
         
         RamseteCommand ramseteCommand =
             new RamseteCommand(

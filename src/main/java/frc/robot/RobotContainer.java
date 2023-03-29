@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -14,7 +16,9 @@ import frc.robot.vision.VisionController;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmPercentOutputCommand;
 import frc.robot.commands.ArmPlaceCommand;
-import frc.robot.commands.AutoCommand;
+import frc.robot.commands.AutoCenterCommand;
+import frc.robot.commands.AutoLeftCommand;
+import frc.robot.commands.AutoRightCommand;
 import frc.robot.commands.IntakeCubeCommand;
 import frc.robot.commands.OuttakeCubeCommand;
 import frc.robot.commands.IntakeConeCommand;
@@ -41,7 +45,9 @@ public class RobotContainer {
     //private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
 
     //Create command objects
-    private final AutoCommand m_autoCommand = new AutoCommand(m_drivetrain);
+    private final AutoCenterCommand m_autoCenterCommand = new AutoCenterCommand(m_drivetrain);
+    private final AutoLeftCommand m_autoLeftCommand = new AutoLeftCommand(m_drivetrain);
+    private final AutoRightCommand m_autoRightCommand = new AutoRightCommand(m_drivetrain);
     private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
     private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_arm);
     private final ArmPercentOutputCommand m_armPercentOutputCommand = new ArmPercentOutputCommand(m_arm);
@@ -84,6 +90,11 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
-        return m_autoCommand.getAutonomousCommand();
+        SendableChooser<Command> m_chooser = new SendableChooser<>();
+        m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
+        m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
+        m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
+        SmartDashboard.putData(m_chooser);
+        return(m_chooser.getSelected());
     }
 }
