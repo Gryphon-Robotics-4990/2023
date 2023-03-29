@@ -41,8 +41,6 @@ public class ArmSubsystem extends SubsystemBase{
         m_pidController = armRight.getPIDController();
         m_encoder = armRight.getEncoder();
 
-        smartMotionSlot = 0;
-
         //Runs configureMotors
         configureMotors();
     }
@@ -56,13 +54,11 @@ public class ArmSubsystem extends SubsystemBase{
         m_pidController.setP(MotionControl.ARM_PID.kP);
         m_pidController.setI(MotionControl.ARM_PID.kI);
         m_pidController.setD(MotionControl.ARM_PID.kD);
-        m_pidController.setIZone(SubsystemConfig.kIz);
-        m_pidController.setFF(SubsystemConfig.kFF);
-        m_pidController.setOutputRange(SubsystemConfig.kMinOutput, SubsystemConfig.kMaxOutput);
-        m_pidController.setSmartMotionMaxVelocity(SubsystemConfig.maxVel, smartMotionSlot);
-        m_pidController.setSmartMotionMinOutputVelocity(SubsystemConfig.minVel, smartMotionSlot);
-        m_pidController.setSmartMotionMaxAccel(SubsystemConfig.maxAcc, smartMotionSlot);
-        m_pidController.setSmartMotionAllowedClosedLoopError(SubsystemConfig.allowedErr, smartMotionSlot);
+
+        armLeft.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE);
+        armRight.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE);
+        armLeft.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+        armRight.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
 
         //Left follows right
         armLeft.follow(armRight, true);
@@ -81,7 +77,7 @@ public class ArmSubsystem extends SubsystemBase{
         //double m_positionRotations = position*Units.RADIAN.to(Units.REVOLUTION);
         //double m_feedforward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
         //m_pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforward);
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
        }
     
 

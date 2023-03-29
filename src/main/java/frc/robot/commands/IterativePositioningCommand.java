@@ -26,16 +26,16 @@ public class IterativePositioningCommand extends CommandBase{
     @Override
     public void execute() {
         // Find necessary change in pose using VisionController
-        Translation2d translationChange = m_vision.getTranslationToTarget();
-        double xChange = translationChange.getX();
-        double yChange = translationChange.getY();
+        //Translation2d translationChange = m_vision.getTranslationToTarget();
+        //double xChange = translationChange.getX();
+        //double yChange = translationChange.getY();
         double angleChange = m_vision.getHorizontalAngle();
         // Calculate goal pose
         Pose2d currentRobotPose = m_drivetrain.getPose();
         double currentX = currentRobotPose.getX();
         double currentY = currentRobotPose.getY();
         double currentAngle = m_drivetrain.getHeading();
-        Pose2d goalPose = new Pose2d(currentX+xChange, currentY+yChange, new Rotation2d(currentAngle+angleChange));
+        Pose2d goalPose = new Pose2d(currentX, currentY, new Rotation2d(currentAngle+angleChange));
         // Calculate and pass in speeds for drivetrain
         ChassisSpeeds adjustedSpeeds = controller.calculate(currentRobotPose, goalPose, 0, 0);
         DifferentialDriveWheelSpeeds wheelSpeeds = MotionControl.kDriveKinematics.toWheelSpeeds(adjustedSpeeds);

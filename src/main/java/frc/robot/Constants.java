@@ -111,15 +111,6 @@ public final class Constants {
         public static double DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY = 3450;//Approx 4.03 meters per second
         public static double AUTO_MAX_VOLTAGE = 10.0;
         //Arm movement information 
-        public static double kIz = 0.0;
-        public static double kFF = 0.0;
-        public static double kMaxOutput = 0.0;
-        public static double kMinOutput = 0.0;
-        public static double maxRPM = 0.0;
-        public static double maxVel = 0.0; //RPM
-        public static double minVel = 0.0;
-        public static double maxAcc = 0.0;
-        public static double allowedErr = 0.0;
         public static double ARM_MAXIMUM_VELOCITY = 5;//in RPM; to be determined!!!
     }
     
@@ -172,6 +163,9 @@ public final class Constants {
         public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0, drivekD);
         //Feedforward objects for arm
         public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
+
+        public static double CLOSED_LOOP_RAMP_RATE = 0.6;
+        public static double OPEN_LOOP_RAMP_RATE = 0.6;
 
 
     }
