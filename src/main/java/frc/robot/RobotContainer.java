@@ -19,6 +19,7 @@ import frc.robot.commands.ArmPlaceCommand;
 import frc.robot.commands.AutoCenterCommand;
 import frc.robot.commands.AutoLeftCommand;
 import frc.robot.commands.AutoRightCommand;
+import frc.robot.commands.DangerCommand;
 import frc.robot.commands.IntakeCubeCommand;
 import frc.robot.commands.OuttakeCubeCommand;
 import frc.robot.commands.IntakeConeCommand;
@@ -56,6 +57,7 @@ public class RobotContainer {
     private final OuttakeCubeCommand m_outtakeCubeCommand = new OuttakeCubeCommand(m_intake);
     private final IntakeConeCommand m_intakeConeCommand = new IntakeConeCommand(m_intake);
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
+    private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -71,9 +73,10 @@ public class RobotContainer {
             () -> DriveUtil.powCopySign(joystickDrive.getRawAxis(AxisF310.JoystickRightX), JOYSTICK_TURNING_EXPONENT)
         );
         
-        m_armManualCommand.setSuppliers(
-            () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT)
-        );
+        // m_armManualCommand.setSuppliers(
+        //     () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT)
+        // );
+
         // Bind binary commands to buttons:
         joystickOperator.getButton(ButtonF310.B).toggleOnTrue(m_intakeCubeCommand);
         joystickOperator.getButton(ButtonF310.X).toggleOnTrue(m_outtakeCubeCommand);
@@ -85,7 +88,7 @@ public class RobotContainer {
     public void setTeleopDefaultCommands() {
         // Set default commands (drivetrain, elevator, slide, etc.)
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
-        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
+        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_dangerCommand);
     }
 
     public Command getAutonomousCommand() {

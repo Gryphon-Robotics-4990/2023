@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -23,6 +25,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_leftRearTalon, m_rightRearTalon;
     private final AHRS m_gyro;
     private final DifferentialDriveOdometry m_odometry;
+    private Field2d m_field = new Field2d();
 
     public DrivetrainSubsystem()
     {
@@ -34,6 +37,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0, new Pose2d(0, 0, m_gyro.getRotation2d()));
 
+        SmartDashboard.putData("Field", m_field);
         configureMotors();
 
         resetEncoders();
@@ -45,6 +49,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     {
         var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         m_odometry.update(gyroAngle, getDistanceLeft(), getDistanceRight());
+        m_field.setRobotPose(m_odometry.getPoseMeters());
+
     }
 
     public void drivePO(double left, double right)

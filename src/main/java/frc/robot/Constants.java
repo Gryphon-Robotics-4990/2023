@@ -111,6 +111,15 @@ public final class Constants {
         public static double DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY = 3450;//Approx 4.03 meters per second
         public static double AUTO_MAX_VOLTAGE = 10.0;
         //Arm movement information 
+        public static double kIz = 0.0;
+        public static double kFF = 0.0;
+        public static double kMaxOutput = 10000;
+        public static double kMinOutput = -10000;
+        public static double maxRPM = 0.0;
+        public static double maxVel = 10000; //RPM
+        public static double minVel = -10000;
+        public static double maxAcc = 10000;
+        public static double allowedErr = 0.0;
         public static double ARM_MAXIMUM_VELOCITY = 5;//in RPM; to be determined!!!
     }
     
@@ -122,7 +131,7 @@ public final class Constants {
         public static TalonSRXGains GRABBER_PID = new TalonSRXGains(0, 0, 0);
         // Tune this by hooking up phoenix tuner
         public static TalonSRXGains ROBOT_BALANCE_PID = new TalonSRXGains(0, 0, 0);
-        public static TalonSRXGains ARM_PID = new TalonSRXGains(0, 0, 0); 
+        public static TalonSRXGains ARM_PID = new TalonSRXGains(0.04, 0, 3); 
         
         //Feedforward
          

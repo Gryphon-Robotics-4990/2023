@@ -12,6 +12,8 @@ import frc.robot.Constants.MotionControl;
 import frc.robot.vision.VisionController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
@@ -31,8 +33,8 @@ public class ArmSubsystem extends SubsystemBase{
         armRight = new CANSparkMax(Ports.CAN_ARM_RIGHT_SPARKMAX, MotorType.kBrushless);
         m_vision = vision;
 
-        m_timer = new Timer();
-        m_timer.start();
+        //m_timer = new Timer();
+        //m_timer.start();
 
         //Creates two Limit Switches
         m_frontLimit = new DigitalInput(Ports.DIO_FRONT_LIMIT_SWITCH);
@@ -98,6 +100,8 @@ public class ArmSubsystem extends SubsystemBase{
         //System.out.printf("Y: %f %n", m_vision.getTranslationToTarget().getY());
         //System.out.printf("Horizontal Angle: %f %n", m_vision.getHorizontalAngle());
         //System.out.printf("Vertical Angle: %f %n", m_vision.getVerticalAngle());
-        //m_timer.delay(1);
+        //.delay(1);
+        SmartDashboard.putBoolean("ArmAtLimit", isArmAtLimit());
+        SmartDashboard.putNumber("Arm Position", getPosition());
     }
 }
