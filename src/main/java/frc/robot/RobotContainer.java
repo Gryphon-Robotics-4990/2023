@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,11 +60,17 @@ public class RobotContainer {
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
     private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
 
+    private SendableChooser<Command> m_chooser = new SendableChooser<>();
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
         // Configure all the control bindings
         configureControlBindings();
 
+        m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
+        m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
+        m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
+        Shuffleboard.getTab("Tab 3").add("Choose Auto Path", m_chooser);
     }
 
     private void configureControlBindings() {
@@ -93,11 +100,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
-        SendableChooser<Command> m_chooser = new SendableChooser<>();
-        m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
-        m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
-        m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
-        SmartDashboard.putData(m_chooser);
         return(m_chooser.getSelected());
     }
 }
