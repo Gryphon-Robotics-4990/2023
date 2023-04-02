@@ -103,11 +103,12 @@ public class RobotContainer {
         // Set default commands (drivetrain, elevator, slide, etc.)
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
         CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
+        //CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
 
     }
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
-        return(m_chooser.getSelected());
+        return(m_autoCenterCommand.getAutonomousCommand());
     }
 }

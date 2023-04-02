@@ -138,12 +138,12 @@ public final class Constants {
         // Feedforward/Feedback Gains for (test) drivetrain
         // Measured (2023) 0.73329
         // Theoretical value: ~0.5
-        public static final double ksVolts = 0.86907;
+        public static final double ksVolts = 1.2317;
         // Measured value: 2.4232
         // Theoretical value: 3
-        public static final double kvVoltSecondsPerMeter = 10.063;
+        public static final double kvVoltSecondsPerMeter = 9.6331;
         // Ignore kA for most feedforward
-        public static final double kaVoltSecondsSquaredPerMeter = 2.9466;
+        public static final double kaVoltSecondsSquaredPerMeter = 3.6473;
         
         // Theoretical values from ReCalc
         public static final double armkS = 3.0;
@@ -151,7 +151,7 @@ public final class Constants {
         public static final double armkG = 0.36;
 
         // Drivetrain PID measured from SysId
-        public static final double drivekP = 0.0027848;
+        public static final double drivekP = 7.1841;
         public static final double drivekD = 0;
         
         // TODO: measure using drivetrain angular test
