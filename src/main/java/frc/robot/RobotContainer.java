@@ -21,7 +21,9 @@ import frc.robot.commands.AutoCenterCommand;
 import frc.robot.commands.AutoLeftCommand;
 import frc.robot.commands.AutoRightCommand;
 import frc.robot.commands.DangerCommand;
+import frc.robot.commands.EyebrowPositionCommand;
 import frc.robot.commands.IntakeCubeCommand;
+import frc.robot.commands.IterativePositioningCommand;
 import frc.robot.commands.OuttakeCubeCommand;
 import frc.robot.commands.IntakeConeCommand;
 import frc.robot.commands.OuttakeConeCommand;
@@ -45,6 +47,7 @@ public class RobotContainer {
 
     //private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
     //private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
+    private final IterativePositioningCommand m_iterativePositioningCommand = new IterativePositioningCommand(m_drivetrain, m_vision);
 
     //Create command objects
     private final AutoCenterCommand m_autoCenterCommand = new AutoCenterCommand(m_drivetrain);
@@ -59,7 +62,7 @@ public class RobotContainer {
     private final IntakeConeCommand m_intakeConeCommand = new IntakeConeCommand(m_intake);
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
     private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
-
+    private final EyebrowPositionCommand m_eyebrowPositionCommand = new EyebrowPositionCommand(m_arm);
     private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
@@ -76,13 +79,17 @@ public class RobotContainer {
     private void configureControlBindings() {
         // Set suppliers for commands with joystick axes:
         m_driveCommand.setSuppliers(
-            () -> DriveUtil.powCopySign(joystickDrive.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT),
-            () -> DriveUtil.powCopySign(joystickDrive.getRawAxis(AxisF310.JoystickRightX), JOYSTICK_TURNING_EXPONENT)
+            () -> joystickDrive.getRawAxis(AxisF310.JoystickLeftY),
+            () -> joystickDrive.getRawAxis(AxisF310.JoystickRightX)
         );
         
-        // m_armManualCommand.setSuppliers(
-        //     () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), JOYSTICK_THROTTLE_EXPONENT)
-        // );
+        m_armManualCommand.setSuppliers(
+            () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.JoystickLeftY), 1)
+        );
+
+        m_eyebrowPositionCommand.setSuppliers(
+            () -> DriveUtil.powCopySign(joystickOperator.getRawAxis(AxisF310.TriggerRight),1)
+        );
 
         // Bind binary commands to buttons:
         joystickOperator.getButton(ButtonF310.B).toggleOnTrue(m_intakeCubeCommand);
@@ -95,7 +102,8 @@ public class RobotContainer {
     public void setTeleopDefaultCommands() {
         // Set default commands (drivetrain, elevator, slide, etc.)
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
-        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_dangerCommand);
+        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
+
     }
 
     public Command getAutonomousCommand() {

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
 import frc.robot.vision.VisionController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,8 @@ public class ArmSubsystem extends SubsystemBase{
     private DigitalInput m_frontLimit, m_backLimit;
     private Timer m_timer;
     private int smartMotionSlot;
+    private Servo m_eyebrow1;
+    private Servo m_eyebrow2;
 
 
     public ArmSubsystem(VisionController vision) {
@@ -43,6 +46,8 @@ public class ArmSubsystem extends SubsystemBase{
         m_pidController = armRight.getPIDController();
         m_encoder = armRight.getEncoder();
 
+        m_eyebrow1 = new Servo(0);
+        m_eyebrow2 = new Servo(1);
         //Runs configureMotors
         configureMotors();
     }
@@ -90,6 +95,12 @@ public class ArmSubsystem extends SubsystemBase{
 
     public double getPosition() {
         return (m_encoder.getPosition());
+    }
+
+    public void eyebrowPose(double position)
+    {
+        m_eyebrow1.set(position);
+        m_eyebrow2.set(position);
     }
 
     @Override

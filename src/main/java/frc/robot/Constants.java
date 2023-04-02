@@ -138,12 +138,12 @@ public final class Constants {
         // Feedforward/Feedback Gains for (test) drivetrain
         // Measured (2023) 0.73329
         // Theoretical value: ~0.5
-        public static final double ksVolts = 0.73329;
+        public static final double ksVolts = 0.86907;
         // Measured value: 2.4232
         // Theoretical value: 3
-        public static final double kvVoltSecondsPerMeter = 2.4232;
+        public static final double kvVoltSecondsPerMeter = 10.063;
         // Ignore kA for most feedforward
-        public static final double kaVoltSecondsSquaredPerMeter = 0.28801;
+        public static final double kaVoltSecondsSquaredPerMeter = 2.9466;
         
         // Theoretical values from ReCalc
         public static final double armkS = 3.0;
@@ -151,8 +151,8 @@ public final class Constants {
         public static final double armkG = 0.36;
 
         // Drivetrain PID measured from SysId
-        public static final double drivekP = 0.27857;
-        public static final double drivekD = 0.0;
+        public static final double drivekP = 0.0027848;
+        public static final double drivekD = 0;
         
         // TODO: measure using drivetrain angular test
         // Measured (2023 drivetrain) 0.41
@@ -181,16 +181,16 @@ public final class Constants {
  
     //Driver settings
     public static double JOYSTICKF310_AXIS_DEADBAND = 0.05;
-    public static double JOYSTICK_THROTTLE_EXPONENT = 1;
-    public static double JOYSTICK_TURNING_EXPONENT = 1;
+    public static double JOYSTICK_THROTTLE_EXPONENT = 1.5;
+    public static double JOYSTICK_TURNING_EXPONENT = 1.5;
 
     //Operation config
     //@Config(name = "Rotation Input Multiplier", tabName = "Op Configuration")
-    public static double ARCADE_ROTATION_MULTIPLIER = 1;
+    public static double ARCADE_ROTATION_MULTIPLIER = 0.2;
 
     //@Config(name = "Speed Input Multiplier", tabName = "Op Configuration")
     //Original value 0.45
-    public static double ARCADE_SPEED_MULTIPLIER = 0.4;
+    public static double ARCADE_SPEED_MULTIPLIER = 1;
 
     //Classes
     public static class TalonSRXGains extends SlotConfiguration {
