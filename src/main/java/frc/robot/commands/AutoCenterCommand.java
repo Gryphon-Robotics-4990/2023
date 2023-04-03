@@ -52,19 +52,19 @@ public class AutoCenterCommand extends CommandBase{
             .addConstraint(autoVoltageConstraint);
 
         // Placeholder positions
-        Trajectory exampleTrajectory = 
+        /*Trajectory exampleTrajectory = 
             TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
                 new Pose2d(3, 0, new Rotation2d(0)),
                 // Pass config
-                config);
+                config);*/
         
-        //PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center_Start", new PathConstraints(2, 1));
+        PathPlannerTrajectory centerStart = PathPlanner.loadPath("Center_Start", new PathConstraints(2, 1));
         
         RamseteCommand ramseteCommand =
             new RamseteCommand(
-                exampleTrajectory,
+                centerStart,
                 m_drivetrain::getPose,
                 new RamseteController(),
                 new SimpleMotorFeedforward(
@@ -79,7 +79,7 @@ public class AutoCenterCommand extends CommandBase{
                 m_drivetrain);
                 
         // Reset odometry to the starting pose of the trajectory
-        m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+        m_drivetrain.resetOdometry(centerStart.getInitialPose());
 
         // Run path following command, then stop at the end
         return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));

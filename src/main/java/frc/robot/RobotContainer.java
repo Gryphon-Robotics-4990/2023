@@ -18,8 +18,11 @@ import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmPercentOutputCommand;
 import frc.robot.commands.ArmPlaceCommand;
 import frc.robot.commands.AutoCenterCommand;
+import frc.robot.commands.AutoCenterCubeCommand;
 import frc.robot.commands.AutoLeftCommand;
+import frc.robot.commands.AutoLeftCubeCommand;
 import frc.robot.commands.AutoRightCommand;
+import frc.robot.commands.AutoRightCubeCommand;
 import frc.robot.commands.DangerCommand;
 import frc.robot.commands.EyebrowPositionCommand;
 import frc.robot.commands.IntakeCubeCommand;
@@ -50,9 +53,9 @@ public class RobotContainer {
     private final IterativePositioningCommand m_iterativePositioningCommand = new IterativePositioningCommand(m_drivetrain, m_vision);
 
     //Create command objects
-    private final AutoCenterCommand m_autoCenterCommand = new AutoCenterCommand(m_drivetrain);
-    private final AutoLeftCommand m_autoLeftCommand = new AutoLeftCommand(m_drivetrain);
-    private final AutoRightCommand m_autoRightCommand = new AutoRightCommand(m_drivetrain);
+    //private final AutoCenterCommand m_autoCenterCommand = new AutoCenterCommand(m_drivetrain);
+    //private final AutoLeftCommand m_autoLeftCommand = new AutoLeftCommand(m_drivetrain);
+    //private final AutoRightCommand m_autoRightCommand = new AutoRightCommand(m_drivetrain);
     private final TeleopArcadeDriveCommand m_driveCommand = new TeleopArcadeDriveCommand(m_drivetrain);
     private final ArmManualCommand m_armManualCommand = new ArmManualCommand(m_arm);
     private final ArmPercentOutputCommand m_armPercentOutputCommand = new ArmPercentOutputCommand(m_arm);
@@ -63,17 +66,20 @@ public class RobotContainer {
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
     private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
     private final EyebrowPositionCommand m_eyebrowPositionCommand = new EyebrowPositionCommand(m_arm);
-    private SendableChooser<Command> m_chooser = new SendableChooser<>();
+    //private SendableChooser<Command> m_chooser = new SendableChooser<>();
+    private final AutoCenterCubeCommand m_autoCenterCubeCommand = new AutoCenterCubeCommand(m_drivetrain, m_arm, m_intake);
+    private final AutoLeftCubeCommand m_autoLeftCubeCommand = new AutoLeftCubeCommand(m_drivetrain, m_arm, m_intake);
+    private final AutoRightCubeCommand m_autoRightCubeCommand = new AutoRightCubeCommand(m_drivetrain, m_arm, m_intake);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
         // Configure all the control bindings
         configureControlBindings();
 
-        m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
-        m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
-        m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
-        Shuffleboard.getTab("Tab 3").add("Choose Auto Path", m_chooser);
+        //m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
+        //m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
+        //m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
+        //Shuffleboard.getTab("Tab 3").add("Choose Auto Path", m_chooser);
     }
 
     private void configureControlBindings() {
@@ -102,13 +108,14 @@ public class RobotContainer {
     public void setTeleopDefaultCommands() {
         // Set default commands (drivetrain, elevator, slide, etc.)
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
+        //CommandScheduler.getInstance().setDefaultCommand(m_arm, m_eyebrowPositionCommand);
         CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
-        //CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
 
     }
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
-        return(m_autoCenterCommand.getAutonomousCommand());
+        //return(m_autoCenterCommand.getAutonomousCommand());
+        return(m_autoCenterCubeCommand);
     }
 }
