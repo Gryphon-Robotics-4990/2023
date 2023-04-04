@@ -138,12 +138,12 @@ public final class Constants {
         // Feedforward/Feedback Gains for (test) drivetrain
         // Measured (2023) 0.73329
         // Theoretical value: ~0.5
-        public static final double ksVolts = 1.2317;
+        public static final double ksVolts = 1.1445;
         // Measured value: 2.4232
         // Theoretical value: 3
-        public static final double kvVoltSecondsPerMeter = 9.6331;
+        public static final double kvVoltSecondsPerMeter = 20;
         // Ignore kA for most feedforward
-        public static final double kaVoltSecondsSquaredPerMeter = 3.6473;
+        public static final double kaVoltSecondsSquaredPerMeter = 7.9791;
         
         // Theoretical values from ReCalc
         public static final double armkS = 3.0;
@@ -151,7 +151,7 @@ public final class Constants {
         public static final double armkG = 0.36;
 
         // Drivetrain PID measured from SysId
-        public static final double drivekP = 7.1841;
+        public static final double drivekP = 4.0847;
         public static final double drivekD = 0;
         
         // TODO: measure using drivetrain angular test
@@ -160,7 +160,7 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
         //Max Trajectory Velocity/Acceleration
         public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
         //Ramsete Parameters (Reasonable Baselines)
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
@@ -168,8 +168,10 @@ public final class Constants {
         // Feedforward objects for drivetrain
         // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
         public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
-        public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(drivekP, 0, drivekD);
-        public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0, drivekD);
+        public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(drivekP, 0.003, drivekD);
+        //public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.15, 0.0033, 12);
+        //public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.15, 0.0033, 12);
+        public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0.003, drivekD);
         //Feedforward objects for arm
         public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
 
@@ -182,11 +184,12 @@ public final class Constants {
     //Driver settings
     public static double JOYSTICKF310_AXIS_DEADBAND = 0.05;
     public static double JOYSTICK_THROTTLE_EXPONENT = 1.5;
-    public static double JOYSTICK_TURNING_EXPONENT = 1.5;
+    public static double JOYSTICK_TURNING_EXPONENT = 2.75
+    ;
 
     //Operation config
     //@Config(name = "Rotation Input Multiplier", tabName = "Op Configuration")
-    public static double ARCADE_ROTATION_MULTIPLIER = 0.2;
+    public static double ARCADE_ROTATION_MULTIPLIER = 0.25;
 
     //@Config(name = "Speed Input Multiplier", tabName = "Op Configuration")
     //Original value 0.45

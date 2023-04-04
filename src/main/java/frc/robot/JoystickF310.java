@@ -17,6 +17,10 @@ public class JoystickF310 extends Joystick {
 		return new JoystickButton(this, button.ordinal());
 	}
 
+	// public POVButton getPOVButton(POVF310 POVangle) {
+	// 	return new POVButton(this, POVangle.ordina);
+	// }
+
 	public Button getButton(POVF310 button) {
 		return new POVButton(this, button.ordinal() * 45);
 	}

@@ -14,9 +14,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.vision.AutoPositioningCommand;
 import frc.robot.vision.AutoPositioningController;
 import frc.robot.vision.VisionController;
+import frc.robot.commands.ArmIntakeConeCommand;
+import frc.robot.commands.ArmIntakeCubeCommand;
 import frc.robot.commands.ArmManualCommand;
+import frc.robot.commands.ArmNeutralCommand;
 import frc.robot.commands.ArmPercentOutputCommand;
 import frc.robot.commands.ArmPlaceCommand;
+import frc.robot.commands.ArmPositionCommand;
 import frc.robot.commands.AutoCenterCommand;
 import frc.robot.commands.AutoCenterCubeCommand;
 import frc.robot.commands.AutoLeftCommand;
@@ -27,11 +31,13 @@ import frc.robot.commands.DangerCommand;
 import frc.robot.commands.DrivetrainRotateCommand;
 import frc.robot.commands.EyebrowPositionCommand;
 import frc.robot.commands.IntakeCubeCommand;
-import frc.robot.commands.IterativePositioningCommand;
+import frc.robot.commands.LowerCubeCommand;
+import frc.robot.commands.MiddleCubeCommand;
 import frc.robot.commands.OuttakeCubeCommand;
 import frc.robot.commands.IntakeConeCommand;
 import frc.robot.commands.OuttakeConeCommand;
 import frc.robot.commands.TeleopArcadeDriveCommand;
+import frc.robot.commands.TopCubeCommand;
 
 import static frc.robot.Constants.*;
 
@@ -73,15 +79,26 @@ public class RobotContainer {
     //private final AutoLeftCubeCommand m_autoLeftCubeCommand = new AutoLeftCubeCommand(m_drivetrain, m_arm, m_intake);
     //private final AutoRightCubeCommand m_autoRightCubeCommand = new AutoRightCubeCommand(m_drivetrain, m_arm, m_intake);
 
+    private final ArmIntakeConeCommand m_armConeIntakeCommand = new ArmIntakeConeCommand(m_arm);
+    private final ArmIntakeCubeCommand m_armCubeIntakeCommand = new ArmIntakeCubeCommand(m_arm);
+    private final LowerCubeCommand m_lowerCubeCommand = new LowerCubeCommand(m_arm);
+    private final MiddleCubeCommand m_middleCubeCommand = new MiddleCubeCommand(m_arm);
+    private final TopCubeCommand m_topCubeCommand = new TopCubeCommand(m_arm);
+    private final ArmNeutralCommand m_armNeutralCommand = new ArmNeutralCommand(m_arm);
+    //private final ArmPositionCommand m_armPositionCommand = new ArmPositionCommand(m_arm);
+    private int povState;
+    private boolean povPressed;
+    
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
         // Configure all the control bindings
         configureControlBindings();
 
-        //m_chooser.setDefaultOption("Center Start", m_autoCenterCommand.getAutonomousCommand());
-        //m_chooser.addOption("Left Start", m_autoLeftCommand.getAutonomousCommand());
-        //m_chooser.addOption("Right Start", m_autoRightCommand.getAutonomousCommand());
-        //Shuffleboard.getTab("Tab 3").add("Choose Auto Path", m_chooser);
+        //m_chooser.setDefaultOption("Center Start", m_autoCenterCubeCommand);
+        //m_chooser.addOption("Left Start", m_autoLeftCubeCommand);
+        //m_chooser.addOption("Right Start", m_autoRightCubeCommand);
+        //Shuffleboard.getTab("Auto Select").add("Choose Auto Path", m_chooser);
+        povPressed = false;
     }
 
     private void configureControlBindings() {
@@ -100,12 +117,51 @@ public class RobotContainer {
         );
 
         // Bind binary commands to buttons:
-        joystickOperator.getButton(ButtonF310.B).toggleOnTrue(m_intakeCubeCommand);
+        joystickOperator.getButton(ButtonF310.B).toggleOnTrue(m_outtakeConeCommand);
         joystickOperator.getButton(ButtonF310.X).toggleOnTrue(m_outtakeCubeCommand);
-        joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeConeCommand);
-        joystickOperator.getButton(ButtonF310.Y).toggleOnTrue(m_outtakeConeCommand);
+        //joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeConeCommand);
+        //joystickOperator.getButton(ButtonF310.Y).toggleOnTrue(m_outtakeConeCommand);
         //joystickOperator.getButton(ButtonF310.).toggleOnTrue(m_armPlaceCommand);
         //joystickOperator.getButton(ButtonF310.).toggleOnTrue(m_drivetrainRotateCommand);
+
+        joystickOperator.getButton(POVF310.Top).onTrue(m_topCubeCommand);
+        joystickOperator.getButton(POVF310.Right).onTrue(m_middleCubeCommand);
+        joystickOperator.getButton(POVF310.Bottom).onTrue(m_lowerCubeCommand);
+        joystickOperator.getButton(POVF310.Left).onTrue(m_armCubeIntakeCommand);
+        joystickOperator.getButton(ButtonF310.Y).onTrue(m_armNeutralCommand);
+        joystickOperator.getButton(ButtonF310.BumperLeft).onTrue(m_armManualCommand);
+        joystickDrive.getButton(ButtonF310.BumperLeft).onTrue(m_armNeutralCommand);
+        joystickOperator.getButton(POVF310.BottomLeft).onTrue(m_armConeIntakeCommand);
+        joystickOperator.getButton(ButtonF310.BumperRight).onTrue(m_eyebrowPositionCommand);
+    }
+
+    public void armUpdate(){
+        //System.out.println(joystickOperator.getPOV());
+        // if (joystickOperator.getPOV() == 0){
+        //     if (povPressed == false){
+        //         povState ++;
+        //         povPressed = true;
+        //         if (povState > 3)
+        //         {
+        //             povState = 3;
+        //         }
+        //     }
+        // } else if (joystickOperator.getPOV() == 180){
+        //     if (povPressed == false){
+        //         povState --;
+        //         povPressed = true;
+        //         if (povState < -2)
+        //         {
+        //             povState = -2;
+        //         }
+        //     }
+        // }
+        
+        // if (joystickOperator.getPOV() == -1){
+        //     povPressed = false;
+        // }
+
+        // m_armPositionCommand.setPosition(povState);
     }
 
     public void setTeleopDefaultCommands() {
@@ -113,8 +169,10 @@ public class RobotContainer {
         CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_driveCommand);
         //CommandScheduler.getInstance().setDefaultCommand(m_arm, m_eyebrowPositionCommand);
         CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armManualCommand);
-
+        //CommandScheduler.getInstance().setDefaultCommand(m_arm, m_eyebrowPositionCommand);
     }
+
+    
 
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
