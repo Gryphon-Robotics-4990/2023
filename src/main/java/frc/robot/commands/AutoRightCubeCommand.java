@@ -21,7 +21,8 @@ public class AutoRightCubeCommand extends SequentialCommandGroup{
                 new TopCubeCommand(arm),
                 new WaitCommand(1.5)
             ),
-            new AutoRightCommand(m_drivetrain).getAutonomousCommand(),
+            //Get meters from field measurements or pathplanner
+            new DrivetrainTranslationCommand(m_drivetrain, 1),
             new OuttakeCubeCommand(m_intake)
         );
     }

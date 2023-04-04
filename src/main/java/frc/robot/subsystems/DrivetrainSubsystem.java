@@ -126,6 +126,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return -m_gyro.getRate();
     }
 
+    public void rotateDegrees(double degrees)
+    {
+        double distance = (MotionControl.kTrackwidthMeters/2.0)*degrees*(Units.DEGREE.to(Units.RADIAN));
+        double ticks = (distance/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
+        m_leftRearTalon.set(ControlMode.Position, m_leftRearTalon.getSelectedSensorPosition()+ticks);
+        m_rightRearTalon.set(ControlMode.Position, m_rightRearTalon.getSelectedSensorPosition()-ticks);
+    }
+
+    public void driveMeters(double meters)
+    {
+        double ticks = (meters/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
+        m_leftRearTalon.set(ControlMode.Position, m_leftRearTalon.getSelectedSensorPosition()+ticks);
+        m_rightRearTalon.set(ControlMode.Position, m_rightRearTalon.getSelectedSensorPosition()+ticks);
+    }
+
     private void configureMotors()
     {
         //First setup talons with default settings

@@ -24,6 +24,7 @@ import frc.robot.commands.AutoLeftCubeCommand;
 import frc.robot.commands.AutoRightCommand;
 import frc.robot.commands.AutoRightCubeCommand;
 import frc.robot.commands.DangerCommand;
+import frc.robot.commands.DrivetrainRotateCommand;
 import frc.robot.commands.EyebrowPositionCommand;
 import frc.robot.commands.IntakeCubeCommand;
 import frc.robot.commands.IterativePositioningCommand;
@@ -50,7 +51,7 @@ public class RobotContainer {
 
     //private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
     //private final AutoPositioningCommand m_autoPositioningCommand = new AutoPositioningCommand(m_autoPositioningController);
-    private final IterativePositioningCommand m_iterativePositioningCommand = new IterativePositioningCommand(m_drivetrain, m_vision);
+    //private final IterativePositioningCommand m_iterativePositioningCommand = new IterativePositioningCommand(m_drivetrain, m_vision);
 
     //Create command objects
     //private final AutoCenterCommand m_autoCenterCommand = new AutoCenterCommand(m_drivetrain);
@@ -66,10 +67,11 @@ public class RobotContainer {
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
     private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
     private final EyebrowPositionCommand m_eyebrowPositionCommand = new EyebrowPositionCommand(m_arm);
+    private final DrivetrainRotateCommand m_drivetrainRotateCommand = new DrivetrainRotateCommand(m_drivetrain, m_vision);
     //private SendableChooser<Command> m_chooser = new SendableChooser<>();
-    private final AutoCenterCubeCommand m_autoCenterCubeCommand = new AutoCenterCubeCommand(m_drivetrain, m_arm, m_intake);
-    private final AutoLeftCubeCommand m_autoLeftCubeCommand = new AutoLeftCubeCommand(m_drivetrain, m_arm, m_intake);
-    private final AutoRightCubeCommand m_autoRightCubeCommand = new AutoRightCubeCommand(m_drivetrain, m_arm, m_intake);
+    //private final AutoCenterCubeCommand m_autoCenterCubeCommand = new AutoCenterCubeCommand(m_drivetrain, m_arm, m_intake);
+    //private final AutoLeftCubeCommand m_autoLeftCubeCommand = new AutoLeftCubeCommand(m_drivetrain, m_arm, m_intake);
+    //private final AutoRightCubeCommand m_autoRightCubeCommand = new AutoRightCubeCommand(m_drivetrain, m_arm, m_intake);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. **/
     public RobotContainer() {
@@ -103,6 +105,7 @@ public class RobotContainer {
         joystickOperator.getButton(ButtonF310.A).toggleOnTrue(m_intakeConeCommand);
         joystickOperator.getButton(ButtonF310.Y).toggleOnTrue(m_outtakeConeCommand);
         //joystickOperator.getButton(ButtonF310.).toggleOnTrue(m_armPlaceCommand);
+        //joystickOperator.getButton(ButtonF310.).toggleOnTrue(m_drivetrainRotateCommand);
     }
 
     public void setTeleopDefaultCommands() {
@@ -116,6 +119,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //Return the command for autonomous mode
         //return(m_autoCenterCommand.getAutonomousCommand());
-        return(m_autoCenterCubeCommand);
+        //return(m_autoCenterCubeCommand);
+        //return(m_chooser.getSelected())
+        return(null);
     }
 }
