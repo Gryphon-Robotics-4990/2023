@@ -64,8 +64,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(right));
     }
 
+    public void driveVelocity(double left, double right) {
+        m_leftRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
+        m_rightRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
+        m_leftRearTalon.set(ControlMode.Velocity, left);
+        m_rightRearTalon.set(ControlMode.Velocity, left);
+    }
+
     public double getGyroTilt() {//Figure out which one we're using
-        return Math.max(m_gyro.getPitch(), m_gyro.getRoll());
+        //return Math.max(m_gyro.getPitch(), m_gyro.getRoll());
+        return(m_gyro.getPitch());
     }
 
     public Pose2d getPose()
@@ -136,9 +144,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void driveMeters(double meters)
     {
+        m_leftRearTalon.selectProfileSlot(0, MotorConfig.TALON_DEFAULT_PID_ID);
+        m_rightRearTalon.selectProfileSlot(0, MotorConfig.TALON_DEFAULT_PID_ID);
         double ticks = (meters/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
         m_leftRearTalon.set(ControlMode.Position, m_leftRearTalon.getSelectedSensorPosition()+ticks);
         m_rightRearTalon.set(ControlMode.Position, m_rightRearTalon.getSelectedSensorPosition()+ticks);
+    }
+
+    public boolean inPosition()
+    {
+        //double ticks = (meterGoal/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
+        return Math.abs(m_rightRearTalon.getClosedLoopError()) < 250;
     }
 
     private void configureMotors()
@@ -172,8 +188,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         cLeft.slot0 = MotionControl.DRIVETRAIN_LEFT_PID;
         cRight.slot0 = MotionControl.DRIVETRAIN_RIGHT_PID;
 
+        cLeft.slot1 = MotionControl.DRIVETRAIN_LEFT_VELOCITY_PID;
+        cRight.slot1 = MotionControl.DRIVETRAIN_RIGHT_VELOCITY_PID;
+
         //NeutralMode mode = NeutralMode.Brake;
-        NeutralMode mode = NeutralMode.Coast;
+        NeutralMode mode = NeutralMode.Brake;
 
         //Brake mode so no coasting
         m_leftRearTalon.setNeutralMode(mode);

@@ -13,6 +13,6 @@ public class MiddleCubeCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        m_armsubsystem.moveToPosition(60);
+        m_armsubsystem.moveToPosition(67);
     }
 }

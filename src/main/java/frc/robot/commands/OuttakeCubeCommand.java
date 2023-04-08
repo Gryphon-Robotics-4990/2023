@@ -13,7 +13,7 @@ public class OuttakeCubeCommand extends CommandBase{
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         m_intake.intakePercentOutput(speed);
     }
 

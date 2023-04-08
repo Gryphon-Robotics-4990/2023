@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
         // Is 10 Amps enough of a stall current limit?
-        intake.setSmartCurrentLimit(10, 20);
+        intake.setSmartCurrentLimit(15, 20);
     }
 
     public void intakePercentOutput(double percent_output) {

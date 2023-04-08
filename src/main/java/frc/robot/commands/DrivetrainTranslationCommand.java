@@ -14,13 +14,13 @@ public class DrivetrainTranslationCommand extends CommandBase{
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         m_drivetrain.driveMeters(m_meters);
     }
 
     @Override
-    public void end(boolean interrupted) {
-        m_drivetrain.drivePO(0, 0);
+    public boolean isFinished() {
+        return m_drivetrain.inPosition();
     }
 
 }

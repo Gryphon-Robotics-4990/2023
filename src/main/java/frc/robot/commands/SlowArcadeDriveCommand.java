@@ -8,12 +8,12 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TeleopArcadeDriveCommand extends CommandBase {
+public class SlowArcadeDriveCommand extends CommandBase {
 
     private final DrivetrainSubsystem m_drivetrain;
     private DoubleSupplier m_speedSupplier, m_rotationSupplier;
 
-    public TeleopArcadeDriveCommand(DrivetrainSubsystem drivetrain) {
+    public SlowArcadeDriveCommand(DrivetrainSubsystem drivetrain) {
         m_drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
@@ -30,18 +30,18 @@ public class TeleopArcadeDriveCommand extends CommandBase {
 
         // if (speed < 0){
         //     speed *= -1;
-        //     speed = -1 * DriveUtil.powCopySign(speed, JOYSTICK_THROTTLE_EXPONENT);
+        //     speed = -SLOW_ARCADE_THROTTLE_MULTIPLIER * DriveUtil.powCopySign(speed, SLOW_ARCADE_THROTTLE_EXPONENT);
         // } else {
-        //     speed = DriveUtil.powCopySign(speed, JOYSTICK_THROTTLE_EXPONENT);
+        //     speed = SLOW_ARCADE_THROTTLE_MULTIPLIER * DriveUtil.powCopySign(speed, SLOW_ARCADE_THROTTLE_EXPONENT);
         // }
 
         // if (rot < 0){
         //     rot *= -1;
-        //     rot = -1 * DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
+        //     rot = -SLOW_ARCADE_ROTATION_MULTIPLIER * DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
         // } else {
-        //     rot = DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
+        //     rot = SLOW_ARCADE_ROTATION_MULTIPLIER * DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
         // }
-        double[] speeds = DriveUtil.arcadeToTankDrive(speed * ARCADE_SPEED_MULTIPLIER, rot * ARCADE_ROTATION_MULTIPLIER);
+        double[] speeds = DriveUtil.arcadeToTankDrive(speed * SLOW_ARCADE_SPEED_MULTIPLIER, rot * SLOW_ARCADE_ROTATION_MULTIPLIER);
         // Convert speeds to target speeds in meters per second, and then divide by hypothetical maximum movement speed
         //Proportion of max speed
         //speeds[0] *= SubsystemConfig.DRIVETRAIN_MAXIMUM_TESTED_ENCODER_VELOCITY;

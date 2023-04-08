@@ -3,7 +3,7 @@ package frc.robot;
 public class DriveUtil {
     
     public static double powCopySign(double a, double b) {
-        return Math.copySign(Math.pow(a, b), a);
+        return Math.copySign(Math.pow(Math.abs(a), b), a);
     }
 
     public static double toAlternateInput(double input) {

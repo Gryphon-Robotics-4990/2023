@@ -68,8 +68,11 @@ public class Robot extends TimedRobot {
 
     public void fetchCamera()
     {
+        // Capture for USB camera 0
         CameraServer.startAutomaticCapture();
-        CvSink cvSink = CameraServer.getVideo();
-        CvSource outputStream = CameraServer.putVideo("Camera", 640, 480);
+        // Capture for USB camera 1
+        CameraServer.startAutomaticCapture();
+        // CvSink cvSink = CameraServer.getVideo();
+        // CvSource outputStream = CameraServer.putVideo("Camera", 640, 480);
     }
 }

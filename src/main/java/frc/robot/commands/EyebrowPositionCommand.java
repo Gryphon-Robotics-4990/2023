@@ -25,4 +25,10 @@ public class EyebrowPositionCommand extends CommandBase{
         double position = m_joystickSupplier.getAsDouble();
         m_armsubsystem.eyebrowPose(position);
     }
+
+    @Override 
+    public void end(boolean interrupted)
+    {
+        m_armsubsystem.eyebrowPose(0.5);
+    }
 }

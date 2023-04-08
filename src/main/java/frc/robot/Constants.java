@@ -168,10 +168,13 @@ public final class Constants {
         // Feedforward objects for drivetrain
         // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
         public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
-        public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(drivekP, 0.003, drivekD);
+        public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.28, 0.00001, 50);
         //public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.15, 0.0033, 12);
         //public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.15, 0.0033, 12);
-        public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(drivekP, 0.003, drivekD);
+        public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.28, 0.00001, 50);
+
+        public static TalonSRXGains DRIVETRAIN_RIGHT_VELOCITY_PID = new TalonSRXGains(0.30, 0.0033, 15);
+        public static TalonSRXGains DRIVETRAIN_LEFT_VELOCITY_PID = new TalonSRXGains(0.30, 0.0033, 15);
         //Feedforward objects for arm
         public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
 
@@ -184,7 +187,7 @@ public final class Constants {
     //Driver settings
     public static double JOYSTICKF310_AXIS_DEADBAND = 0.05;
     public static double JOYSTICK_THROTTLE_EXPONENT = 1.5;
-    public static double JOYSTICK_TURNING_EXPONENT = 2.75
+    public static double JOYSTICK_TURNING_EXPONENT = 3;
     ;
 
     //Operation config
@@ -195,6 +198,9 @@ public final class Constants {
     //Original value 0.45
     public static double ARCADE_SPEED_MULTIPLIER = 1;
 
+    public static double SLOW_ARCADE_ROTATION_MULTIPLIER = 0.25;
+    public static double SLOW_ARCADE_SPEED_MULTIPLIER = 0.45;
+    public static double SLOW_JOYSTICK_THROTTLE_EXPONENT = 1;
     //Classes
     public static class TalonSRXGains extends SlotConfiguration {
 

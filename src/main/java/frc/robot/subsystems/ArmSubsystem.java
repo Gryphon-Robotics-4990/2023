@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType; 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotionControl;
@@ -48,6 +49,11 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_eyebrow1 = new Servo(0);
         m_eyebrow2 = new Servo(1);
+
+        SmartDashboard.putData("Reset Encoder", new InstantCommand(
+            () -> resetArmPosition()
+        ));
+
         //Runs configureMotors
         configureMotors();
     }
@@ -69,6 +75,9 @@ public class ArmSubsystem extends SubsystemBase{
 
         //Left follows right
         armLeft.follow(armRight, true);
+
+        armLeft.setSmartCurrentLimit(22, 25);
+        armRight.setSmartCurrentLimit(22, 25);
     }
 
     public boolean isArmAtLimit() {
@@ -85,7 +94,12 @@ public class ArmSubsystem extends SubsystemBase{
         //double m_feedforward = MotionControl.ARM_FEEDFORWARD.calculate(m_offsetposition, 0);
         //m_pidController.setReference(m_positionRotations, ControlType.kPosition, 0, m_feedforward);
         m_pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
-       }
+    }
+
+    public void resetArmPosition()
+    {
+        m_encoder.setPosition(0);
+    }
     
 
     //Hell if I know :/ 
@@ -100,7 +114,7 @@ public class ArmSubsystem extends SubsystemBase{
     public void eyebrowPose(double position)
     {
         m_eyebrow1.set(position);
-        m_eyebrow2.set(position);
+        m_eyebrow2.set(1-position);
     }
 
     @Override
@@ -112,7 +126,9 @@ public class ArmSubsystem extends SubsystemBase{
         //System.out.printf("Horizontal Angle: %f %n", m_vision.getHorizontalAngle());
         //System.out.printf("Vertical Angle: %f %n", m_vision.getVerticalAngle());
         //.delay(1);
-        SmartDashboard.putBoolean("ArmAtLimit", isArmAtLimit());
-        SmartDashboard.putNumber("Arm Position", getPosition());
+        // SmartDashboard.putBoolean("ArmAtLimit", isArmAtLimit());
+        // SmartDashboard.putNumber("Arm Position", getPosition());
+        //SmartDashboard.putNumber("Arm Current", armRight.getOutputCurrent());
+        
     }
 }

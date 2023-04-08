@@ -13,6 +13,7 @@ public class TopCubeCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        m_armsubsystem.moveToPosition(80);
+        //m_armsubsystem.resetArmPosition();
+        m_armsubsystem.moveToPosition(84);
     }
 }
