@@ -59,7 +59,7 @@ public class RobotContainer {
 
     // Create subsystem objects
     private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-    private final ArmSubsystem m_arm = new ArmSubsystem(m_vision);
+    private final ArmSubsystem m_arm = new ArmSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
     //private final AutoPositioningController m_autoPositioningController = new AutoPositioningController(m_drivetrain, m_vision);
