@@ -18,12 +18,10 @@ import frc.robot.units.*;
 public final class Constants {
     public static class Ports {
         //Laptop ports
-        // Test drive joystick laptop port to figure out wtf is wrong with auto
         public static int PORT_JOYSTICK_DRIVE = 2;
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN Bus IDs
-        // For test drivetrain
         public static int CAN_DRIVETRAIN_LEFT_FRONT_VICTOR = 1;
         public static int CAN_DRIVETRAIN_LEFT_REAR_TALONSRX = 15;
         public static int CAN_DRIVETRAIN_RIGHT_FRONT_VICTOR = 3;

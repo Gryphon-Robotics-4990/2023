@@ -35,13 +35,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon = new WPI_TalonSRX(Ports.CAN_DRIVETRAIN_RIGHT_REAR_TALONSRX);
         
         m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0, new Pose2d(0, 0, m_gyro.getRotation2d()));
+        m_gyro.reset();
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0,
+        new Pose2d(0, 0, m_gyro.getRotation2d()));
 
         SmartDashboard.putData("Field", m_field);
         configureMotors();
 
         resetEncoders();
-        m_gyro.reset();
     }
 
     @Override
@@ -69,11 +70,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
         m_leftRearTalon.set(ControlMode.Velocity, left);
         m_rightRearTalon.set(ControlMode.Velocity, left);
-    }
-
-    public double getGyroTilt() {//Figure out which one we're using
-        //return Math.max(m_gyro.getPitch(), m_gyro.getRoll());
-        return(m_gyro.getPitch());
     }
 
     public Pose2d getPose()
@@ -105,11 +101,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon.setSelectedSensorPosition(0);
     }
 
-    public double getAverageEncoderDistance()
-    {
-        return (m_leftRearTalon.getSelectedSensorPosition() + m_rightRearTalon.getSelectedSensorPosition())/2.0;
-    }
-
     // Distance (meters) = wheel radius * angle traveled (in radians)
     public double getDistanceLeft() {
         return (RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS) * (m_leftRearTalon.getSelectedSensorPosition() * Units.ENCODER_ANGLE.to(Units.RADIAN));
@@ -129,19 +120,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return m_gyro.getRotation2d().getDegrees();
     }
 
-    public double getTurnRate()
-    {
-        return -m_gyro.getRate();
-    }
-
-    public void rotateDegrees(double degrees)
-    {
-        double distance = (MotionControl.kTrackwidthMeters/2.0)*degrees*(Units.DEGREE.to(Units.RADIAN));
-        double ticks = (distance/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
-        m_leftRearTalon.set(ControlMode.Position, m_leftRearTalon.getSelectedSensorPosition()+ticks);
-        m_rightRearTalon.set(ControlMode.Position, m_rightRearTalon.getSelectedSensorPosition()-ticks);
-    }
-
     public void driveMeters(double meters)
     {
         m_leftRearTalon.selectProfileSlot(0, MotorConfig.TALON_DEFAULT_PID_ID);
@@ -153,7 +131,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public boolean inPosition()
     {
-        //double ticks = (meterGoal/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
         return Math.abs(m_rightRearTalon.getClosedLoopError()) < 250;
     }
 
@@ -183,7 +160,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         TalonSRXConfiguration cLeft = new TalonSRXConfiguration(), cRight = new TalonSRXConfiguration();
 
         //Setup config objects with desired values
-        // Change to actual drivetrain once we use it
         // Using feedforward, we need to use the PID values given by SysID
         cLeft.slot0 = MotionControl.DRIVETRAIN_LEFT_PID;
         cRight.slot0 = MotionControl.DRIVETRAIN_RIGHT_PID;
@@ -191,7 +167,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         cLeft.slot1 = MotionControl.DRIVETRAIN_LEFT_VELOCITY_PID;
         cRight.slot1 = MotionControl.DRIVETRAIN_RIGHT_VELOCITY_PID;
 
-        //NeutralMode mode = NeutralMode.Brake;
         NeutralMode mode = NeutralMode.Brake;
 
         //Brake mode so no coasting

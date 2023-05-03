@@ -29,9 +29,7 @@ import frc.robot.commands.AutoLeftCommand;
 import frc.robot.commands.AutoLeftCubeCommand;
 import frc.robot.commands.AutoRightCommand;
 import frc.robot.commands.AutoRightCubeCommand;
-import frc.robot.commands.BalanceRobotCommand2;
 import frc.robot.commands.DangerCommand;
-import frc.robot.commands.DrivetrainRotateCommand;
 import frc.robot.commands.DrivetrainTranslationCommand;
 import frc.robot.commands.EyebrowPositionCommand;
 import frc.robot.commands.IntakeCubeCommand;
@@ -81,7 +79,6 @@ public class RobotContainer {
     private final OuttakeConeCommand m_outtakeConeCommand = new OuttakeConeCommand(m_intake);
     private final DangerCommand m_dangerCommand = new DangerCommand(m_arm, m_vision);
     private final EyebrowPositionCommand m_eyebrowPositionCommand = new EyebrowPositionCommand(m_arm);
-    private final DrivetrainRotateCommand m_drivetrainRotateCommand = new DrivetrainRotateCommand(m_drivetrain, m_vision);
     private SendableChooser<Supplier<Command>> m_chooser = new SendableChooser<>();
     private SendableChooser<Command> m_cubeShelfChooser = new SendableChooser<>();
 
@@ -94,7 +91,6 @@ public class RobotContainer {
     private final DrivetrainTranslationCommand m_drivetrainTranslation = new DrivetrainTranslationCommand(m_drivetrain, 1);
     private final ArmEStopCommand m_armStopCommand = new ArmEStopCommand(m_arm);
     //private final ArmPositionCommand m_armPositionCommand = new ArmPositionCommand(m_arm);
-    private final BalanceRobotCommand2 m_balanceRobotCommand2 = new BalanceRobotCommand2(m_drivetrain);
     
     private int povState;
     private boolean povPressed;
