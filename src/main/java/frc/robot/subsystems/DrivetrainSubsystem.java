@@ -36,8 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         
         m_gyro = new AHRS(Ports.SPI_PORT_GYRO);
         m_gyro.reset();
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0,
-        new Pose2d(0, 0, m_gyro.getRotation2d()));
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0, new Pose2d(0, 0, m_gyro.getRotation2d()));
 
         SmartDashboard.putData("Field", m_field);
         configureMotors();
@@ -51,7 +50,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         m_odometry.update(gyroAngle, getDistanceLeft(), getDistanceRight());
         m_field.setRobotPose(m_odometry.getPoseMeters());
-
     }
 
     public void drivePO(double left, double right)
@@ -60,16 +58,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_rightRearTalon.set(ControlMode.PercentOutput, right);
     }
 
-    public void drive(double left, double right) {
+    public void drive(double left, double right)
+    {
+        m_leftRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
+        m_rightRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
         m_leftRearTalon.set(ControlMode.Velocity, left, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(left));
         m_rightRearTalon.set(ControlMode.Velocity, right, DemandType.ArbitraryFeedForward, MotionControl.DRIVETRAIN_FEEDFORWARD.calculate(right));
     }
 
-    public void driveVelocity(double left, double right) {
-        m_leftRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
-        m_rightRearTalon.selectProfileSlot(1, MotorConfig.TALON_DEFAULT_PID_ID);
-        m_leftRearTalon.set(ControlMode.Velocity, left);
-        m_rightRearTalon.set(ControlMode.Velocity, left);
+    public void tankDriveVolts(double leftVolts, double rightVolts)
+    {
+        m_leftRearTalon.setVoltage(leftVolts);
+        m_rightRearTalon.setVoltage(rightVolts);
     }
 
     public Pose2d getPose()
@@ -77,28 +77,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return m_odometry.getPoseMeters();
     }
 
+    public double getHeading()
+    {
+        return m_gyro.getRotation2d().getDegrees();
+    }
+
     public DifferentialDriveWheelSpeeds getWheelSpeeds()
     {
         return new DifferentialDriveWheelSpeeds(m_leftRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND), m_rightRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
-    }
-
-    public void resetOdometry(Pose2d pose)
-    {
-        resetEncoders();
-        m_odometry.resetPosition(m_gyro.getRotation2d(), this.getDistanceLeft(), this.getDistanceRight(), pose);
-    }
-
-    public void tankDriveVolts(double leftVolts, double rightVolts)
-    {
-        System.out.printf("Left: %.2f, Right: %.2f\n", leftVolts, rightVolts);
-        m_leftRearTalon.setVoltage(leftVolts);
-        m_rightRearTalon.setVoltage(rightVolts);
-    }
-
-    public void resetEncoders()
-    {
-        m_leftRearTalon.setSelectedSensorPosition(0);
-        m_rightRearTalon.setSelectedSensorPosition(0);
     }
 
     // Distance (meters) = wheel radius * angle traveled (in radians)
@@ -115,9 +101,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_gyro.reset();
     }
 
-    public double getHeading()
+    public void resetEncoders()
     {
-        return m_gyro.getRotation2d().getDegrees();
+        m_leftRearTalon.setSelectedSensorPosition(0);
+        m_rightRearTalon.setSelectedSensorPosition(0);
+    }
+
+    public void resetOdometry(Pose2d pose)
+    {
+        resetEncoders();
+        m_odometry.resetPosition(m_gyro.getRotation2d(), this.getDistanceLeft(), this.getDistanceRight(), pose);
     }
 
     public void driveMeters(double meters)
