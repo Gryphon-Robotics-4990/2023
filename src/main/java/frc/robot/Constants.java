@@ -167,12 +167,11 @@ public final class Constants {
         // For now, set acceleration constant to 0 (its very hard to tune and not necessary for most drivetrain feedforward)
         public static SimpleMotorFeedforward DRIVETRAIN_FEEDFORWARD = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter);
         public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.28, 0.00001, 50);
-        //public static TalonSRXGains DRIVETRAIN_LEFT_PID = new TalonSRXGains(0.15, 0.0033, 12);
-        //public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.15, 0.0033, 12);
         public static TalonSRXGains DRIVETRAIN_RIGHT_PID = new TalonSRXGains(0.28, 0.00001, 50);
 
         public static TalonSRXGains DRIVETRAIN_RIGHT_VELOCITY_PID = new TalonSRXGains(0.30, 0.0033, 15);
         public static TalonSRXGains DRIVETRAIN_LEFT_VELOCITY_PID = new TalonSRXGains(0.30, 0.0033, 15);
+        
         //Feedforward objects for arm
         public static ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(armkS, armkG, armkV);
 

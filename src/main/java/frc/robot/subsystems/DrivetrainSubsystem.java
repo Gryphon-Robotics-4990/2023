@@ -84,7 +84,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds()
     {
-        return new DifferentialDriveWheelSpeeds(m_leftRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND), m_rightRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
+        return new DifferentialDriveWheelSpeeds(m_leftRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND),
+        m_rightRearTalon.getSelectedSensorVelocity() * Units.ENCODER_ANGULAR_VELOCITY.to(Units.METERS_PER_SECOND));
     }
 
     // Distance (meters) = wheel radius * angle traveled (in radians)
@@ -113,6 +114,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_odometry.resetPosition(m_gyro.getRotation2d(), this.getDistanceLeft(), this.getDistanceRight(), pose);
     }
 
+    public boolean inPosition()
+    {
+        return Math.abs(m_rightRearTalon.getClosedLoopError()) < 250;
+    }
+
     public void driveMeters(double meters)
     {
         m_leftRearTalon.selectProfileSlot(0, MotorConfig.TALON_DEFAULT_PID_ID);
@@ -120,11 +126,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double ticks = (meters/(RobotMeasurements.DRIVETRAIN_WHEEL_RADIUS_METERS*2.0*Math.PI))*MotorConfig.TALON_ENCODER_RESOLUTION;
         m_leftRearTalon.set(ControlMode.Position, m_leftRearTalon.getSelectedSensorPosition()+ticks);
         m_rightRearTalon.set(ControlMode.Position, m_rightRearTalon.getSelectedSensorPosition()+ticks);
-    }
-
-    public boolean inPosition()
-    {
-        return Math.abs(m_rightRearTalon.getClosedLoopError()) < 250;
     }
 
     private void configureMotors()
