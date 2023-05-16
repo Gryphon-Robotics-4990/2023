@@ -28,19 +28,6 @@ public class TeleopArcadeDriveCommand extends CommandBase {
         double speed = m_speedSupplier.getAsDouble();
         double rot = m_rotationSupplier.getAsDouble();
 
-        // if (speed < 0){
-        //     speed *= -1;
-        //     speed = -1 * DriveUtil.powCopySign(speed, JOYSTICK_THROTTLE_EXPONENT);
-        // } else {
-        //     speed = DriveUtil.powCopySign(speed, JOYSTICK_THROTTLE_EXPONENT);
-        // }
-
-        // if (rot < 0){
-        //     rot *= -1;
-        //     rot = -1 * DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
-        // } else {
-        //     rot = DriveUtil.powCopySign(rot, JOYSTICK_TURNING_EXPONENT);
-        // }
         double[] speeds = DriveUtil.arcadeToTankDrive(speed * ARCADE_SPEED_MULTIPLIER, rot * ARCADE_ROTATION_MULTIPLIER);
         // Convert speeds to target speeds in meters per second, and then divide by hypothetical maximum movement speed
         //Proportion of max speed

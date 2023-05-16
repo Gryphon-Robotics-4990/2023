@@ -25,7 +25,7 @@ public class AutoCenterCubeCommand extends SequentialCommandGroup{
                 chooser.getSelected(),
                 new WaitCommand(2)
             ),
-
+            
             //Get meters from field measurements or pathplanner
             new ParallelRaceGroup(
                 new DrivetrainTranslationCommand(m_drivetrain, 0.5),
@@ -37,24 +37,6 @@ public class AutoCenterCubeCommand extends SequentialCommandGroup{
                 // Wait extra time so we make sure that the cube exits
                 new WaitCommand(2)
             )
-
-            // new ParallelCommandGroup(
-            //     new ParallelRaceGroup(
-            //         new DrivetrainTranslationCommand(m_drivetrain, -2.5),
-            //         new WaitUntilCommand(() -> Math.abs(m_drivetrain.getGyroTilt()) > 12)
-            //     ),
-
-            //     new ParallelRaceGroup(
-            //         new ArmNeutralCommand(arm),
-            //         new WaitCommand(1.5)
-            //     )
-            // ),
-        
-            // new BalanceRobotCommand2(m_drivetrain)
         );
     }
-
-    //public ParallelRaceGroup driveForwardCommand(double meters){
-
-    //}
 }

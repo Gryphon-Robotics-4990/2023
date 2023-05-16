@@ -54,9 +54,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {
-        //m_robotContainer.armUpdate();
-    }
+    public void teleopPeriodic() {}
 
     @Override
     public void testInit() {

@@ -25,6 +25,7 @@ public class AutoLeftCubeCommand extends SequentialCommandGroup{
                 chooser.getSelected(),
                 new WaitCommand(2)
             ),
+            
             //Get meters from field measurements or pathplanner
             new ParallelRaceGroup(
                 new DrivetrainTranslationCommand(m_drivetrain, 0.5),
@@ -45,8 +46,4 @@ public class AutoLeftCubeCommand extends SequentialCommandGroup{
             )
         );
     }
-
-    //public ParallelRaceGroup driveForwardCommand(double meters){
-
-    //}
 }
