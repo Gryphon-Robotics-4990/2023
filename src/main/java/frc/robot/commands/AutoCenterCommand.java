@@ -36,8 +36,7 @@ public class AutoCenterCommand extends CommandBase{
             new DifferentialDriveVoltageConstraint(
                 new SimpleMotorFeedforward(
                     MotionControl.ksVolts,
-                    MotionControl.kvVoltSecondsPerMeter,
-                    MotionControl.kaVoltSecondsSquaredPerMeter),
+                    MotionControl.kvVoltSecondsPerMeter),
                 MotionControl.kDriveKinematics,
                 SubsystemConfig.AUTO_MAX_VOLTAGE);
 
